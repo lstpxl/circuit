@@ -5,8 +5,8 @@ import type { Svg, Container } from "@svgdotjs/svg.js";
 import { weightedChoice } from "./weightedChoice";
 
 const cellSize = 30;
-const gridWidth = 7;
-const gridHeight = 7;
+const gridWidth = 5;
+const gridHeight = 5;
 const strokeWidth = 4;
 const defaultStroke = { color: "#f06", width: strokeWidth, linecap: "round" };
 
@@ -139,7 +139,7 @@ const correctWeightsNeighbors = (
 
 const createGrid = (): Line[] => {
 	const flat = flattenedGrid(vertexGrid);
-	const fillRatio = 0.4;
+	const fillRatio = 0.3;
 	const numberOfLines = Math.floor(flat.length * fillRatio);
 	const weights = flat.map((cell) =>
 		cell.dir === "a" || cell.dir === "e" ? 3 : 1,
@@ -160,7 +160,7 @@ const createGrid = (): Line[] => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const createGrid_v1 = (): Line[] => {
 	const flat = flattenedGrid(vertexGrid);
-	const fillRatio = 0.3;
+	const fillRatio = 0.2;
 	const numberOfLines = Math.floor(flat.length * fillRatio);
 	const weights = flat.map((cell) =>
 		cell.dir === "a" || cell.dir === "e" ? 2 : 1,
