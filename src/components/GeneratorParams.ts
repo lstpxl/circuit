@@ -1,8 +1,18 @@
+export type WindDirection =
+	| "none"
+	| "vertical"
+	| "horizontal"
+	| "backslash"
+	| "slash"
+	| "orthogonal"
+	| "diagonal";
+
 export type GeneratorParams = {
 	gridSize: number;
 	cohesion: number;
-	direction: string;
+	direction: WindDirection;
 	strength: number;
+	density: number;
 };
 
 export const defaultGeneratorParams: GeneratorParams = {
@@ -10,4 +20,5 @@ export const defaultGeneratorParams: GeneratorParams = {
 	cohesion: 0,
 	direction: "none",
 	strength: 0,
+	density: 40,
 };

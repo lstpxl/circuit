@@ -75,6 +75,43 @@ export default function GeneratorForm(props: GeneratorFormProps) {
 					/>
 				</div>
 
+				{/* Density */}
+				<div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center w-full max-w-lg">
+					<Label htmlFor="density_input" className="text-left">
+						Density
+					</Label>
+					<Controller
+						name="density"
+						control={control}
+						render={({ field }) => (
+							<Slider
+								id="density_slider"
+								min={0}
+								max={100}
+								step={1}
+								value={[field.value]}
+								onValueChange={(value) => field.onChange(value[0])}
+								className="w-[200px]"
+							/>
+						)}
+					/>
+					<Controller
+						name="density"
+						control={control}
+						render={({ field }) => (
+							<Input
+								id="density_input"
+								type="number"
+								min={0}
+								max={100}
+								value={field.value}
+								onChange={(e) => field.onChange(Number(e.target.value))}
+								className="w-20 text-center"
+							/>
+						)}
+					/>
+				</div>
+
 				{/* Cohesion */}
 				<div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center w-full max-w-lg">
 					<Label htmlFor="cohesion_input" className="text-left">
@@ -132,6 +169,8 @@ export default function GeneratorForm(props: GeneratorFormProps) {
 										<SelectItem value="horizontal">Horizontal</SelectItem>
 										<SelectItem value="backslash">Backslash</SelectItem>
 										<SelectItem value="slash">Slash</SelectItem>
+										<SelectItem value="orthogonal">Orthogonal</SelectItem>
+										<SelectItem value="diagonal">Diagonal</SelectItem>
 									</SelectGroup>
 								</SelectContent>
 							</Select>
