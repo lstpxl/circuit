@@ -3,6 +3,11 @@ import "./App.css";
 import { SVG } from "@svgdotjs/svg.js";
 import type { Svg, Container } from "@svgdotjs/svg.js";
 import { weightedChoice } from "./weightedChoice";
+import GeneratorForm from "./components/GeneratorForm";
+import {
+	defaultGeneratorParams,
+	type GeneratorParams,
+} from "./components/GeneratorParams";
 
 const cellSize = 30;
 const gridWidth = 5;
@@ -256,7 +261,7 @@ const drawPattern: DrawPattern = (draw) => {
 };
 
 function App() {
-	const createSVG = useCallback(() => {
+	const createSVG = useCallback((params: GeneratorParams) => {
 		// Clear existing content first
 		const container = document.getElementById("drawing-container");
 		if (container) {
@@ -276,7 +281,7 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		createSVG();
+		createSVG(defaultGeneratorParams);
 		return () => {
 			const container = document.getElementById("drawing-container");
 			if (container) {
@@ -285,13 +290,20 @@ function App() {
 		};
 	}, [createSVG]);
 
-	const handleRefresh = () => {
-		createSVG();
+	const handleGenerate = (params: GeneratorParams) => {
+		console.log(params);
+		createSVG(params);
 	};
 
 	return (
 		<div
-			style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				gap: "20px",
+			}}
+			className="dark"
 		>
 			<div
 				id="drawing-container"
@@ -300,10 +312,11 @@ function App() {
 					height: gridHeight * cellSize + strokeWidth,
 					overflow: "hidden",
 				}}
+				className="box-content border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px]"
 			/>
-			<button
+			{/* 			<button
 				type="button"
-				onClick={() => handleRefresh()}
+				onClick={() => handleGenerate()}
 				style={{
 					marginTop: "80px",
 					padding: "10px 20px",
@@ -312,7 +325,13 @@ function App() {
 				}}
 			>
 				Generate
-			</button>
+			</button> */}
+			<GeneratorForm
+				style={{
+					marginTop: "80px",
+				}}
+				onGenerate={handleGenerate}
+			/>
 		</div>
 	);
 }
