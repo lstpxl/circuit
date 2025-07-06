@@ -122,13 +122,17 @@ const correctWeightsNeighbors = (
 	line: LineCoords,
 	weights: number[],
 	dimensions: Dimensions,
+	cohesion: number,
 ): void => {
+	if (cohesion === 0) return;
+	const coefficient =
+		cohesion > 0 ? 1 + cohesion / 20 : 1 / (1 - cohesion / 20);
 	const neighbors = getFlatLineNeighbors(line, dimensions);
 	for (const neighbor of neighbors) {
 		const index = all.findIndex((l) => linesEqual(l, neighbor));
 		if (index !== -1) {
 			if (all[index].status === false) {
-				weights[index] /= 5;
+				weights[index] *= coefficient;
 			}
 		}
 	}
@@ -176,7 +180,13 @@ export const createGrid = (generatorParams: GeneratorParams): Line[] => {
 	for (let i = 0; i < numberOfLines; i++) {
 		const randomIndex = weightedChoice(weights);
 		flat[randomIndex].status = true;
-		correctWeightsNeighbors(flat, flat[randomIndex], weights, dimensions);
+		correctWeightsNeighbors(
+			flat,
+			flat[randomIndex],
+			weights,
+			dimensions,
+			generatorParams.cohesion,
+		);
 		result.push(flat[randomIndex]);
 		flat.splice(randomIndex, 1);
 		weights.splice(randomIndex, 1);
