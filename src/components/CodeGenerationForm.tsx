@@ -31,8 +31,8 @@ export default function CodeGenerationForm(props: CodeFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} {...formProps}>
-			<Card className="flex flex-col items-center rounded-lg shadow-lg p-6 bg-neutral-500 dark:bg-neutral-800 gap-4 w-[468px]">
-				<div className="grid grid-cols-1 gap-4 w-full max-w-lg">
+			<Card className="flex flex-col items-center rounded-lg shadow-lg p-6 bg-neutral-500 dark:bg-neutral-800 gap-4 min-w-[468px]">
+				<div className="grid grid-cols-1 gap-4 max-w-lg">
 					<Label htmlFor="code_input" className="text-left">
 						Code
 					</Label>
@@ -46,7 +46,7 @@ export default function CodeGenerationForm(props: CodeFormProps) {
 								rows={2}
 								value={field.value}
 								onChange={field.onChange}
-								className="w-full resize-none"
+								className="w-full resize-none min-w-[400px]"
 							/>
 						)}
 					/>
