@@ -220,6 +220,10 @@ export const serializeGrid = (
 		parts.push(line ? "1" : "0");
 	}
 	for (let x = 0; x < dimensions.width; x++) {
+		const line1 = lines.find(
+			(l) => l.x === x && l.y === dimensions.height && l.dir === "a",
+		);
+		parts.push(line1 ? "1" : "0");
 		const line = lines.find(
 			(l) => l.x === x && l.y === dimensions.height && l.dir === "r",
 		);
@@ -308,6 +312,8 @@ export const createGridFromCode = (code: string): Line[] => {
 		empty[y][dimensions.width].d = status;
 	}
 	for (let x = 0; x < dimensions.width; x++) {
+		const status1 = Number.parseInt(queue.shift() || "0") === 1;
+		empty[dimensions.height][x].a = status1;
 		const status = Number.parseInt(queue.shift() || "0") === 1;
 		empty[dimensions.height][x].r = status;
 	}
