@@ -83,7 +83,7 @@ export default function Pattern({
 			)
 			.addTo("#drawing-container");
 
-		console.log("lines redraw");
+		// console.log("lines redraw");
 		drawPattern(draw, drawParams, data.lines);
 		return () => {
 			const container = document.getElementById("drawing-container");
@@ -93,7 +93,7 @@ export default function Pattern({
 		};
 	});
 
-	console.log("pattern rerender");
+	// console.log("pattern rerender");
 
 	return (
 		<div
