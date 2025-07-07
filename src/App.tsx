@@ -3,7 +3,6 @@ import "./App.css";
 import { SVG } from "@svgdotjs/svg.js";
 import type { Svg, Container } from "@svgdotjs/svg.js";
 
-import GeneratorForm from "./components/GeneratorForm";
 import {
 	defaultGeneratorParams,
 	type GeneratorParams,
@@ -15,6 +14,7 @@ import {
 	type Line,
 } from "./components/Generator";
 import CodeText from "./components/CodeText";
+import GenerationForm from "./components/GenerationForm";
 
 // type DrawLine = (draw: Svg | Container, x: number, y: number, dir: Dir) => void;
 
@@ -127,6 +127,10 @@ function App() {
 		setGeneratorParams(params);
 	};
 
+	const handleGenerateFromCode = (code: string) => {
+		console.log("Code ", code);
+	};
+
 	return (
 		<div
 			style={{
@@ -151,7 +155,12 @@ function App() {
 				className="box-content border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px]"
 			/>
 			<CodeText code={code} />
-			<GeneratorForm onGenerate={handleGenerate} />
+			{/* <GeneratorForm onGenerate={handleGenerate} /> */}
+			{/* <CodeForm onGenerate={handleGenerateFromCode} /> */}
+			<GenerationForm
+				onParamGenerate={handleGenerate}
+				onCodeGenerate={handleGenerateFromCode}
+			/>
 		</div>
 	);
 }

@@ -244,6 +244,15 @@ export const serializeGrid = (
 	return parts.join("");
 };
 
+export const bareBin2base64 = (str: string): string => {
+	const bin = str.match(/.{1,8}/g);
+	if (!bin) return "";
+	const base64 = bin
+		.map((b) => String.fromCharCode(Number.parseInt(b, 2)))
+		.join("");
+	return btoa(base64);
+};
+
 export const bin2base64 = (str: string, dimensions: Dimensions): string => {
 	const bin = str.match(/.{1,8}/g);
 	if (!bin) return "";
