@@ -1,6 +1,13 @@
 import { bareBin2base64 } from "./Generator";
 
-export function validateCode(code: string): boolean {
+type CodeParseResult = {
+	width: number;
+	height: number;
+	expectedLength: number;
+	binary: string;
+};
+
+export function validateCode(code: string): CodeParseResult | false {
 	const regex = /^(\d+)x(\d+)x([A-Za-z0-9+/=]+)$/;
 	const match = code.match(regex);
 	if (!match) return false;
@@ -19,5 +26,26 @@ export function validateCode(code: string): boolean {
 		return false;
 	}
 
-	return true;
+	const binaryString = atob(base64Data);
+	let bin = "";
+	const lastOctetLength = expectedLength % 8;
+	for (let i = 0; i < binaryString.length; i++) {
+		if (i === binaryString.length - 1 && lastOctetLength > 0) {
+			bin += binaryString
+				.charCodeAt(i)
+				.toString(2)
+				.padStart(lastOctetLength, "0");
+		} else {
+			bin += binaryString.charCodeAt(i).toString(2).padStart(8, "0");
+		}
+	}
+
+	const result = {
+		width: width,
+		height: height,
+		expectedLength: expectedLength,
+		binary: bin,
+	};
+
+	return result;
 }

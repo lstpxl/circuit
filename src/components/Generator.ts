@@ -1,4 +1,5 @@
 import { weightedChoice } from "../weightedChoice";
+import { validateCode } from "./codeValidator";
 import type { GeneratorParams } from "./GeneratorParams";
 
 // const cellSize = 30;
@@ -300,4 +301,43 @@ export const pattern2code: Pattern2Code = (pattern, dimensions) => {
 	const binary = serializeGrid(pattern, dimensions);
 	const code = bin2base64(binary, dimensions);
 	return code;
+};
+
+export const createGridFromCode = (code: string): Line[] => {
+	const parsed = validateCode(code);
+	if (!parsed) {
+		throw new Error("Invalid code format");
+	}
+	const empty = getEmptyVertexGrid(parsed.width, parsed.height);
+	const dimensions: Dimensions = {
+		width: parsed.width,
+		height: parsed.height,
+	};
+
+	// console.log("binary=", parsed.binary);
+
+	// Set status of lines based on the binary string
+	const queue = parsed.binary.split("");
+	for (let y = 0; y < dimensions.height; y++) {
+		for (let x = 0; x < dimensions.width; x++) {
+			for (const dir of ["r", "d", "a", "e"] as Dir[]) {
+				const status = Number.parseInt(queue.shift() || "0") === 1;
+				empty[y][x][dir] = status;
+			}
+		}
+		const status = Number.parseInt(queue.shift() || "0") === 1;
+		empty[y][dimensions.width].d = status;
+	}
+	for (let x = 0; x < dimensions.width; x++) {
+		const status = Number.parseInt(queue.shift() || "0") === 1;
+		empty[dimensions.height][x].r = status;
+	}
+
+	// Convert the grid to a flat array of lines
+	const flat = flattenedGrid(empty);
+	/* 	const result: Line[] = [];
+	for (let i = 0; i < flat.length; i++) {
+		result.push(flat[i]);
+	} */
+	return flat;
 };

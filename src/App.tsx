@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { SVG } from "@svgdotjs/svg.js";
-import type { Svg, Container } from "@svgdotjs/svg.js";
 
 import {
 	defaultGeneratorParams,
@@ -9,89 +7,14 @@ import {
 } from "./components/GeneratorParams";
 import {
 	createGrid,
+	createGridFromCode,
 	pattern2code,
-	type Dir,
-	type Line,
 } from "./components/Generator";
 import CodeText from "./components/CodeText";
 import GenerationForm from "./components/GenerationForm";
-
-// type DrawLine = (draw: Svg | Container, x: number, y: number, dir: Dir) => void;
-
-type DrawParams = {
-	cellSize: number;
-	strokeWidth: number;
-	stroke: { color: string; width: number; linecap: string };
-};
-
-type DrawLine = (
-	draw: Svg | Container,
-	x: number,
-	y: number,
-	dir: Dir,
-	drawParams: DrawParams,
-) => void;
-
-const drawLine: DrawLine = (draw, x, y, dir, drawParams: DrawParams) => {
-	let x2 = x;
-	let y2 = y;
-	if (dir === "r") {
-		x2 = x + 1;
-	} else if (dir === "d") {
-		y2 = y + 1;
-	} else if (dir === "a") {
-		x2 = x + 1;
-		y2 = y - 1;
-	} else if (dir === "e") {
-		x2 = x + 1;
-		y2 = y + 1;
-	}
-	draw
-		.line(
-			x * drawParams.cellSize,
-			y * drawParams.cellSize,
-			x2 * drawParams.cellSize,
-			y2 * drawParams.cellSize,
-		)
-		.stroke(drawParams.stroke)
-		.dmove(drawParams.strokeWidth / 2, drawParams.strokeWidth / 2);
-};
-
-type DrawPattern = (
-	draw: Svg | Container,
-	drawParams: DrawParams,
-	pattern: Line[],
-) => void;
-
-const drawPattern: DrawPattern = (draw, drawParams, pattern) => {
-	for (const { x, y, dir, status } of pattern) {
-		if (status) {
-			drawLine(draw, x, y, dir, drawParams);
-		}
-	}
-};
-
-const globDrawPattern = (
-	// draw: Svg | Container,
-	drawParams: DrawParams,
-	generatorParams: GeneratorParams,
-	pattern: Line[],
-) => {
-	const container = document.getElementById("drawing-container");
-	if (container) {
-		container.innerHTML = "";
-	}
-
-	// Create new SVG instance
-	const draw = SVG()
-		.size(
-			generatorParams.gridSize * drawParams.cellSize + drawParams.strokeWidth,
-			generatorParams.gridSize * drawParams.cellSize + drawParams.strokeWidth,
-		)
-		.addTo("#drawing-container");
-
-	drawPattern(draw, drawParams, pattern);
-};
+import { validateCode } from "./components/codeValidator";
+import type { PatternDisplayData } from "./components/Pattern";
+import Pattern from "./components/Pattern";
 
 const drawParams = {
 	cellSize: 30,
@@ -103,33 +26,52 @@ function App() {
 	const [generatorParams, setGeneratorParams] = useState<GeneratorParams>(
 		defaultGeneratorParams,
 	);
-	// Removed unused pattern state
+	const [patternData, setPatternData] = useState<PatternDisplayData>({
+		width: defaultGeneratorParams.gridSize,
+		height: defaultGeneratorParams.gridSize,
+		lines: createGrid(generatorParams),
+	});
 	const [code, setCode] = useState<string>("");
 
 	useEffect(() => {
-		const pattern = createGrid(generatorParams);
+		setCode(
+			pattern2code(patternData.lines, {
+				width: patternData.width,
+				height: patternData.height,
+			}),
+		);
+	}, [patternData, patternData.lines]);
+
+	const handleGenerateFromParams = (params: GeneratorParams) => {
+		setGeneratorParams(params);
+		// console.log("creating from params", params);
+		const pattern = createGrid(params);
 		setCode(
 			pattern2code(pattern, {
 				width: generatorParams.gridSize,
 				height: generatorParams.gridSize,
 			}),
 		);
-		globDrawPattern(drawParams, generatorParams, pattern);
-		return () => {
-			const container = document.getElementById("drawing-container");
-			if (container) {
-				container.innerHTML = "";
-			}
-		};
-	}, [generatorParams]);
-
-	const handleGenerate = (params: GeneratorParams) => {
-		setGeneratorParams(params);
+		setPatternData({
+			width: generatorParams.gridSize,
+			height: generatorParams.gridSize,
+			lines: pattern,
+		});
 	};
 
-	const handleGenerateFromCode = (code: string) => {
-		console.log("Code ", code);
+	const handleGenerateFromCode = (newCode: string) => {
+		setCode(newCode);
+		console.log("set code", newCode);
+		const pattern = createGridFromCode(newCode);
+		const { width, height } = validateCode(newCode) || { width: 1 };
+		setPatternData({
+			width: width,
+			height: height || 1,
+			lines: pattern,
+		});
 	};
+
+	console.log("code when render", code);
 
 	return (
 		<div
@@ -141,24 +83,12 @@ function App() {
 			}}
 			className="dark"
 		>
-			<div
-				id="drawing-container"
-				style={{
-					width:
-						generatorParams.gridSize * drawParams.cellSize +
-						drawParams.strokeWidth,
-					height:
-						generatorParams.gridSize * drawParams.cellSize +
-						drawParams.strokeWidth,
-					overflow: "hidden",
-				}}
-				className="box-content border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px]"
-			/>
+			<div className="border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px]">
+				<Pattern data={patternData} drawParams={drawParams} />
+			</div>
 			<CodeText code={code} />
-			{/* <GeneratorForm onGenerate={handleGenerate} /> */}
-			{/* <CodeForm onGenerate={handleGenerateFromCode} /> */}
 			<GenerationForm
-				onParamGenerate={handleGenerate}
+				onParamGenerate={handleGenerateFromParams}
 				onCodeGenerate={handleGenerateFromCode}
 			/>
 		</div>
