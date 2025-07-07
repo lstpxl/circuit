@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 
 import {
@@ -22,29 +22,27 @@ const drawParams = {
 	stroke: { color: "#f06", width: 4, linecap: "round" },
 };
 
+const initialPatternData: PatternDisplayData = {
+	width: defaultGeneratorParams.gridSize,
+	height: defaultGeneratorParams.gridSize,
+	lines: createGrid(defaultGeneratorParams),
+};
+
 function App() {
 	const [generatorParams, setGeneratorParams] = useState<GeneratorParams>(
 		defaultGeneratorParams,
 	);
-	const [patternData, setPatternData] = useState<PatternDisplayData>({
-		width: defaultGeneratorParams.gridSize,
-		height: defaultGeneratorParams.gridSize,
-		lines: createGrid(generatorParams),
-	});
-	const [code, setCode] = useState<string>("");
-
-	useEffect(() => {
-		setCode(
-			pattern2code(patternData.lines, {
-				width: patternData.width,
-				height: patternData.height,
-			}),
-		);
-	}, [patternData, patternData.lines]);
+	const [patternData, setPatternData] =
+		useState<PatternDisplayData>(initialPatternData);
+	const [code, setCode] = useState<string>(
+		pattern2code(initialPatternData.lines, {
+			width: initialPatternData.width,
+			height: initialPatternData.height,
+		}),
+	);
 
 	const handleGenerateFromParams = (params: GeneratorParams) => {
 		setGeneratorParams(params);
-		// console.log("creating from params", params);
 		const pattern = createGrid(params);
 		setCode(
 			pattern2code(pattern, {
@@ -71,22 +69,14 @@ function App() {
 		});
 	};
 
-	console.log("code when render", code);
-
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				gap: "20px",
-			}}
-			className="dark"
-		>
-			<div className="border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px]">
-				<Pattern data={patternData} drawParams={drawParams} />
+		<div className="dark flex flex-col items-center gap-16">
+			<div className="flex flex-col items-center gap-4">
+				<div className="border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px]">
+					<Pattern data={patternData} drawParams={drawParams} />
+				</div>
+				<CodeText code={code} />
 			</div>
-			<CodeText code={code} />
 			<GenerationForm
 				onParamGenerate={handleGenerateFromParams}
 				onCodeGenerate={handleGenerateFromCode}
