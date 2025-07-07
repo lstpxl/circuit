@@ -8,7 +8,8 @@ export type WindDirection =
 	| "diagonal";
 
 export type GeneratorParams = {
-	gridSize: number;
+	width: number;
+	height: number;
 	cohesion: number;
 	direction: WindDirection;
 	strength: number;
@@ -16,7 +17,8 @@ export type GeneratorParams = {
 };
 
 export const defaultGeneratorParams: GeneratorParams = {
-	gridSize: 7,
+	width: 7,
+	height: 7,
 	cohesion: 0,
 	direction: "none",
 	strength: 0,

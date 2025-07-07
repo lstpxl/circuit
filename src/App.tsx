@@ -23,9 +23,9 @@ const drawParams = {
 };
 
 const initialPatternData: PatternDisplayData = {
-	width: defaultGeneratorParams.gridSize,
-	height: defaultGeneratorParams.gridSize,
-	lines: createGrid(defaultGeneratorParams),
+    width: defaultGeneratorParams.width,
+    height: defaultGeneratorParams.height,
+    lines: createGrid(defaultGeneratorParams),
 };
 
 function App() {
@@ -39,19 +39,19 @@ function App() {
 	);
 
 	const handleGenerateFromParams = (params: GeneratorParams) => {
-		const pattern = createGrid(params);
-		setCode(
-			pattern2code(pattern, {
-				width: params.gridSize,
-				height: params.gridSize,
-			}),
-		);
-		setPatternData({
-			width: params.gridSize,
-			height: params.gridSize,
-			lines: pattern,
-		});
-	};
+    const pattern = createGrid(params);
+    setCode(
+        pattern2code(pattern, {
+            width: params.width,
+            height: params.height,
+        }),
+    );
+    setPatternData({
+        width: params.width,
+        height: params.height,
+        lines: pattern,
+    });
+};
 
 	const handleGenerateFromCode = (newCode: string) => {
 		setCode(newCode);

@@ -38,17 +38,17 @@ export default function ParamGenerationForm(props: GeneratorFormProps) {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} {...formProps}>
 			<Card className="flex flex-col items-center rounded-lg shadow-lg p-6 bg-neutral-500 dark:bg-neutral-800 gap-2">
-				{/* Grid Size */}
+				{/* Width */}
 				<div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center w-full max-w-lg">
-					<Label htmlFor="size_input" className="text-left">
-						Grid size
+					<Label htmlFor="width_input" className="text-left">
+						Width
 					</Label>
 					<Controller
-						name="gridSize"
+						name="width"
 						control={control}
 						render={({ field }) => (
 							<Slider
-								id="size_slider"
+								id="width_slider"
 								min={1}
 								max={25}
 								step={1}
@@ -59,11 +59,48 @@ export default function ParamGenerationForm(props: GeneratorFormProps) {
 						)}
 					/>
 					<Controller
-						name="gridSize"
+						name="width"
 						control={control}
 						render={({ field }) => (
 							<Input
-								id="size_input"
+								id="width_input"
+								type="number"
+								min={1}
+								max={25}
+								value={field.value}
+								onChange={(e) => field.onChange(Number(e.target.value))}
+								className="w-20 text-center"
+							/>
+						)}
+					/>
+				</div>
+
+				{/* Height */}
+				<div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center w-full max-w-lg">
+					<Label htmlFor="height_input" className="text-left">
+						Height
+					</Label>
+					<Controller
+						name="height"
+						control={control}
+						render={({ field }) => (
+							<Slider
+								id="height_slider"
+								min={1}
+								max={25}
+								step={1}
+								value={[field.value]}
+								onValueChange={(value) => field.onChange(value[0])}
+								className="w-[200px]"
+							/>
+						)}
+					/>
+					<Controller
+						name="height"
+						control={control}
+						render={({ field }) => (
+							<Input
+								id="height_input"
 								type="number"
 								min={1}
 								max={25}

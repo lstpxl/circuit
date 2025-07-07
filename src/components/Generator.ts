@@ -149,12 +149,12 @@ const weightCallback = (dir: Dir, generatorParams: GeneratorParams): number => {
 
 export const createGrid = (generatorParams: GeneratorParams): Line[] => {
 	const empty = getEmptyVertexGrid(
-		generatorParams.gridSize,
-		generatorParams.gridSize,
+		generatorParams.width,
+		generatorParams.height,
 	);
 	const dimensions: Dimensions = {
-		width: generatorParams.gridSize,
-		height: generatorParams.gridSize,
+		width: generatorParams.width,
+		height: generatorParams.height,
 	};
 	const flat = flattenedGrid(empty);
 	const fillRatio = generatorParams.density / 100;
@@ -182,8 +182,8 @@ export const createGrid = (generatorParams: GeneratorParams): Line[] => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const createGrid_v1 = (generatorParams: GeneratorParams): Line[] => {
 	const empty = getEmptyVertexGrid(
-		generatorParams.gridSize,
-		generatorParams.gridSize,
+		generatorParams.width,
+		generatorParams.height,
 	);
 	const flat = flattenedGrid(empty);
 	const fillRatio = 0.2;
