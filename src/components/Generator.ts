@@ -2,29 +2,12 @@ import { weightedChoice } from "../weightedChoice";
 import { validateCode } from "./codeValidator";
 import type { GeneratorParams } from "./GeneratorParams";
 
-// const cellSize = 30;
-// const gridWidth = 5;
-// const gridHeight = 5;
-// const strokeWidth = 4;
-// const defaultStroke = { color: "#f06", width: strokeWidth, linecap: "round" };
-
-// type DrawPattern = (draw: Svg | Container) => void;
-
 export type Dir = "r" | "d" | "a" | "e"; // right, down, up-right, down-right
 
 type GridCell = { r: boolean; d: boolean; a: boolean; e: boolean };
 type Grid = GridCell[][];
 
 export type Dimensions = { width: number; height: number };
-
-/* const vertexGrid: Grid = Array.from({ length: gridHeight + 1 }, () =>
-	Array.from({ length: gridWidth + 1 }, () => ({
-		r: false,
-		d: false,
-		a: false,
-		e: false,
-	})),
-); */
 
 const getEmptyVertexGrid = (gridWidth: number, gridHeight: number): Grid => {
 	return Array.from({ length: gridHeight + 1 }, () =>
@@ -270,7 +253,6 @@ const base64ToBin = (base64: string, dimensions: Dimensions): string => {
 	if (!match) {
 		throw new Error("Invalid base64 format");
 	}
-	// console.log("match:", match);
 	const [, width, height, base64Data] = match;
 	if (
 		Number.parseInt(width) !== dimensions.width ||
@@ -313,9 +295,6 @@ export const createGridFromCode = (code: string): Line[] => {
 		width: parsed.width,
 		height: parsed.height,
 	};
-
-	// console.log("binary=", parsed.binary);
-
 	// Set status of lines based on the binary string
 	const queue = parsed.binary.split("");
 	for (let y = 0; y < dimensions.height; y++) {
@@ -335,9 +314,5 @@ export const createGridFromCode = (code: string): Line[] => {
 
 	// Convert the grid to a flat array of lines
 	const flat = flattenedGrid(empty);
-	/* 	const result: Line[] = [];
-	for (let i = 0; i < flat.length; i++) {
-		result.push(flat[i]);
-	} */
 	return flat;
 };
