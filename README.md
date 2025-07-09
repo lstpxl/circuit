@@ -2,6 +2,8 @@
 
 ## Line pattern generator
 
+## Play [at Pages](https://lstpxl.github.io/circuit/)
+
 Playground at [https://lstpxl.github.io/circuit/](https://lstpxl.github.io/circuit/)
 
 ![Club City Hall façade](public/street-view.jpg)
