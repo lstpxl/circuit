@@ -101,7 +101,7 @@ button:focus-visible {
 	outline-offset: 2px;
 } */
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
 	:root {
 		color: #213547;
 		background-color: #ffffff;
@@ -112,7 +112,7 @@ button:focus-visible {
 	button {
 		background-color: #f9f9f9;
 	}
-}
+} */
 
 @theme {
 	--color-brand: #f06;
@@ -243,4 +243,16 @@ button:focus-visible {
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+/* Hide number input spin buttons */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
