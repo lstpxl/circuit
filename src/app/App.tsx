@@ -1,19 +1,13 @@
 import { useState } from "react";
-import "./App.css";
 
-import {
-	defaultGeneratorParams,
-	type GeneratorParams,
-} from "./components/GeneratorParams";
-import {
-	createGrid,
-	createGridFromCode,
-	pattern2code,
-} from "./components/Generator";
-import GenerationForm from "./components/GenerationForm";
-import { validateCode } from "./components/codeValidator";
-import type { PatternDisplayData } from "./components/Pattern";
-import Pattern from "./components/Pattern";
+import type { GeneratorParams } from "../model/GeneratorParams.d.ts";
+import { createGrid } from "../model/Generator";
+import GenerationForm from "../components/GenerationForm";
+import { validateCode } from "../model/codeValidator";
+import type { PatternDisplayData } from "../components/Pattern";
+import Pattern from "../components/Pattern";
+import { defaultGeneratorParams } from "@/model/defaultGeneratorParams.ts";
+import { createGridFromCode, pattern2code } from "@/model/encode.ts";
 
 const drawParams = {
 	cellSize: 30,

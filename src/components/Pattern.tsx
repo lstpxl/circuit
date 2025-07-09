@@ -1,5 +1,5 @@
 import { SVG } from "@svgdotjs/svg.js";
-import type { Dir, Line } from "./Generator";
+import type { Dir, Line } from "../model/Grid";
 import { useEffect } from "react";
 import type { Svg, Container } from "@svgdotjs/svg.js";
 
@@ -74,17 +74,15 @@ export default function Pattern({
 		if (container) {
 			container.innerHTML = "";
 		}
-
-		// Create new SVG instance
 		const draw = SVG()
 			.size(
 				data.width * drawParams.cellSize + drawParams.strokeWidth,
 				data.height * drawParams.cellSize + drawParams.strokeWidth,
 			)
 			.addTo("#drawing-container");
-
 		// console.log("lines redraw");
 		drawPattern(draw, drawParams, data.lines);
+
 		return () => {
 			const container = document.getElementById("drawing-container");
 			if (container) {
@@ -92,8 +90,6 @@ export default function Pattern({
 			}
 		};
 	});
-
-	// console.log("pattern rerender");
 
 	return (
 		<div

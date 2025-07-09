@@ -12,10 +12,8 @@ import {
 } from "./ui/select";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import {
-	defaultGeneratorParams,
-	type GeneratorParams,
-} from "./GeneratorParams";
+import type { GeneratorParams } from "@/model/GeneratorParams";
+import { defaultGeneratorParams } from "@/model/defaultGeneratorParams";
 
 type GeneratorFormProps = {
 	onGenerate: (data: GeneratorParams) => void;

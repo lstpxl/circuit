@@ -1,4 +1,4 @@
-import { bareBin2base64 } from "./Generator";
+import { bareBin2base64 } from "./encode";
 
 type CodeParseResult = {
 	width: number;

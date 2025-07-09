@@ -1,5 +1,5 @@
 import CodeGenerationForm from "./CodeGenerationForm";
-import type { GeneratorParams } from "./GeneratorParams";
+import type { GeneratorParams } from "../model/GeneratorParams";
 import ParamGenerationForm from "./ParamGenerationForm";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { useState } from "react";
