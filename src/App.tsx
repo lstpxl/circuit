@@ -88,7 +88,7 @@ function App() {
 			const svgUrl = URL.createObjectURL(svgBlob);
 			const downloadLink = document.createElement("a");
 			downloadLink.href = svgUrl;
-			downloadLink.download = "pattern.svg";
+			downloadLink.download = "circuit-pattern.svg";
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
