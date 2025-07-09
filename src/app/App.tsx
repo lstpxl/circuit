@@ -8,6 +8,7 @@ import type { PatternDisplayData } from "../components/Pattern";
 import Pattern from "../components/Pattern";
 import { defaultGeneratorParams } from "@/model/defaultGeneratorParams.ts";
 import { createGridFromCode, pattern2code } from "@/model/encode.ts";
+import AuthorCredits from "@/components/AuthorCredits.tsx";
 
 const drawParams = {
 	cellSize: 30,
@@ -154,6 +155,7 @@ function App() {
 				onParamGenerate={handleGenerateFromParams}
 				onCodeGenerate={handleGenerateFromCode}
 			/>
+			<AuthorCredits />
 		</div>
 	);
 }
