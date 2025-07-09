@@ -1,5 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
+.rubik-500 {
+	font-family: "Rubik", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 500;
+	font-style: normal;
+}
+
 /* 
 ---break--- */
 @custom-variant dark (&:is(.dark *));
@@ -30,7 +38,7 @@
 	--popover: oklch(0.205 0 0);
 	--popover-foreground: oklch(0.985 0 0);
 	--primary: oklch(0.6388 0.2554 10.51);
-	--primary-foreground: oklch(0.205 0 0);
+	--primary-foreground: oklch(0.985 0 0);
 	--secondary: oklch(0.269 0 0);
 	--secondary-foreground: oklch(0.785 0 0);
 	--muted: oklch(0.4 0 0);
@@ -56,12 +64,17 @@
 	--sidebar-ring: oklch(0.556 0 0);
 }
 
-a {
+/* a {
+	font-weight: 500;
+	color: var(--secondary-foreground);
+	text-decoration: inherit;
+} */
+a:not(.inline-flex) {
 	font-weight: 500;
 	color: var(--secondary-foreground);
 	text-decoration: inherit;
 }
-a:hover {
+a:not(.inline-flex):hover {
 	color: var(--color-brand);
 }
 
@@ -170,7 +183,7 @@ button:focus-visible {
 	--popover: oklch(0.205 0 0);
 	--popover-foreground: oklch(0.985 0 0);
 	--primary: oklch(0.6388 0.2554 10.51); /* Use a more visible primary color */
-	--primary-foreground: oklch(0.205 0 0);
+	--primary-foreground: oklch(0.985 0 0);
 	--secondary: oklch(0.269 0 0);
 	--secondary-foreground: oklch(0.785 0 0);
 	--muted: oklch(0.4 0 0); /* Make darker for better contrast */
@@ -207,7 +220,7 @@ button:focus-visible {
 	--popover: oklch(1 0 0);
 	--popover-foreground: oklch(0.145 0 0);
 	--primary: oklch(0.205 0 0);
-	--primary-foreground: oklch(0.985 0 0);
+	--primary-foreground: oklch(0.85 0 0);
 	--secondary: oklch(0.97 0 0);
 	--secondary-foreground: oklch(0.205 0 0);
 	--muted: oklch(0.97 0 0);
@@ -258,10 +271,11 @@ input[type="number"] {
 }
 
 #root {
-	max-width: 1280px;
+	/* max-width: 1280px; */
 	margin: 0 auto;
-	padding: 2rem;
+	/* padding: 2rem; */
 	text-align: center;
+	width: 100vw;
 }
 
 /* .logo {

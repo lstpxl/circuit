@@ -1,6 +1,7 @@
-export default function Logo() {
+export default function Logo(props: { className?: string }) {
+	const { className = "" } = props;
 	return (
-		<div className="fixed top-4 left-4 z-50">
+		<div className={`fixed top-4 z-50 ${className}`}>
 			<img
 				src="/circuit-large.svg"
 				alt="Circuit Logo"

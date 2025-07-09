@@ -1,6 +1,6 @@
 import { SVG } from "@svgdotjs/svg.js";
 import type { Dir, Line } from "../model/Grid";
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import type { Svg, Container } from "@svgdotjs/svg.js";
 
 export type PatternDisplayData = {
@@ -69,8 +69,10 @@ export default function Pattern({
 	data: PatternDisplayData;
 	drawParams: DrawParams;
 }) {
+	const containerId = useId();
+
 	useEffect(() => {
-		const container = document.getElementById("drawing-container");
+		const container = document.getElementById(`#pattern-${containerId}`);
 		if (container) {
 			container.innerHTML = "";
 		}
@@ -79,21 +81,25 @@ export default function Pattern({
 				data.width * drawParams.cellSize + drawParams.strokeWidth,
 				data.height * drawParams.cellSize + drawParams.strokeWidth,
 			)
-			.addTo("#drawing-container");
+			.addTo(`#pattern-${containerId}`);
 		// console.log("lines redraw");
 		drawPattern(draw, drawParams, data.lines);
 
 		return () => {
-			const container = document.getElementById("drawing-container");
+			const container = document.getElementById(`pattern-${containerId}`);
 			if (container) {
 				container.innerHTML = "";
 			}
 		};
 	});
 
+	// console.log("data", data);
+	// console.log("drawParams", drawParams);
+	console.log("Pattern rerender!");
+
 	return (
 		<div
-			id="drawing-container"
+			id={`pattern-${containerId}`}
 			style={{
 				width: data.width * drawParams.cellSize + drawParams.strokeWidth,
 				height: data.height * drawParams.cellSize + drawParams.strokeWidth,

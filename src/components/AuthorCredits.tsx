@@ -20,7 +20,7 @@ export default function AuthorCredits() {
 			<span>&copy; 2025 Ilia Pavlov</span>
 			<a
 				href="https://github.com/lstpxl/circuit"
-				className="inline-flex items-baseline gap-1"
+				className="inline-flex items-baseline gap-1 hover:text-primary"
 			>
 				<GithubLogo />
 				GitHub repository
