@@ -1,4 +1,4 @@
-name: Deploy with GitHub Pages 2
+name: Deploy to GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
