@@ -5,6 +5,6 @@ export const defaultGeneratorParams: GeneratorParams = {
 	height: 7,
 	cohesion: 0,
 	direction: "none",
-	strength: 0,
+	strength: 50,
 	density: 40,
 };

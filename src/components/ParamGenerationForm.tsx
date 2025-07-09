@@ -2,18 +2,11 @@ import { useForm, Controller } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "./ui/select";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import type { GeneratorParams } from "@/model/GeneratorParams";
 import { defaultGeneratorParams } from "@/model/defaultGeneratorParams";
+import AccentDirToggleGroup from "./AccentDirToggleGroup";
 
 type GeneratorFormProps = {
 	onGenerate: (data: GeneratorParams) => void;
@@ -186,29 +179,17 @@ export default function ParamGenerationForm(props: GeneratorFormProps) {
 
 				{/* Direction */}
 				<div className="grid grid-cols-[1fr_auto] gap-4 items-center w-full max-w-lg">
-					<Label htmlFor="direction_select" className="text-left">
+					<Label htmlFor="direction_toggle" className="text-left">
 						Accent direction
 					</Label>
 					<Controller
 						name="direction"
 						control={control}
 						render={({ field }) => (
-							<Select value={field.value} onValueChange={field.onChange}>
-								<SelectTrigger className="w-[220px] justify-self-end">
-									<SelectValue placeholder="Select direction" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectItem value="none">None</SelectItem>
-										<SelectItem value="vertical">Vertical</SelectItem>
-										<SelectItem value="horizontal">Horizontal</SelectItem>
-										<SelectItem value="backslash">Backslash</SelectItem>
-										<SelectItem value="slash">Slash</SelectItem>
-										<SelectItem value="orthogonal">Orthogonal</SelectItem>
-										<SelectItem value="diagonal">Diagonal</SelectItem>
-									</SelectGroup>
-								</SelectContent>
-							</Select>
+							<AccentDirToggleGroup
+								value={field.value}
+								onValueChange={field.onChange}
+							/>
 						)}
 					/>
 				</div>
