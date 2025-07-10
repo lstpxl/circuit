@@ -39,7 +39,7 @@ function arcY(x: number, containerDimensions: Dimensions): number {
 	const y = -Math.sqrt(1 - nX * nX);
 	// console.log("y", y);
 	const scale = containerDimensions.width * 4;
-	const result = -scale * (1 + y);
+	const result = -scale * (1 + y) - containerDimensions.height * 0.05;
 	// console.log("result", result);
 	return result;
 }
@@ -179,7 +179,7 @@ export default function Carousel() {
 		return () => {
 			window.removeEventListener("resize", updateViewport);
 		};
-	}, [slideDimensions.length]); // Remove containerDimensions and slideDimensions from dependencies
+	}, [slideDimensions]);
 
 	// Add a separate effect to update coordinates when dimensions change
 	useLayoutEffect(() => {

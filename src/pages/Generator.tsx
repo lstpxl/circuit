@@ -25,6 +25,9 @@ const initialPatternData: PatternDisplayData = {
 };
 
 function Generator({ code: urlCode }: { code?: string }) {
+	// TODO
+	console.log("code from URL:", urlCode);
+
 	const [patternData, setPatternData] =
 		useState<PatternDisplayData>(initialPatternData);
 	const [code, setCode] = useState<string>(
