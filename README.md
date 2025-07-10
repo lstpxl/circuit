@@ -2,6 +2,8 @@
 
 ## Line pattern generator
 
+![Circuit](public/circuit-large.svg)
+
 ## Play [at Pages](https://lstpxl.github.io/circuit/)
 
 Playground at [https://lstpxl.github.io/circuit/](https://lstpxl.github.io/circuit/)
