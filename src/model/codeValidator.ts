@@ -8,7 +8,7 @@ type CodeParseResult = {
 };
 
 export function validateCode(code: string): CodeParseResult | false {
-	const regex = /^(\d+)x(\d+)x([A-Za-z0-9+/=]+)$/;
+	const regex = /^(\d+)x(\d+)x([A-Za-z0-9_-]+)$/;
 	const match = code.match(regex);
 	if (!match) return false;
 	const [, widthStr, heightStr, base64Data] = match;
@@ -26,7 +26,15 @@ export function validateCode(code: string): CodeParseResult | false {
 		return false;
 	}
 
-	const binaryString = atob(base64Data);
+	// Convert URL-safe base64 back to standard base64
+	let standardBase64 = base64Data.replace(/-/g, "+").replace(/_/g, "/");
+
+	// Add padding if needed
+	while (standardBase64.length % 4) {
+		standardBase64 += "=";
+	}
+
+	const binaryString = atob(standardBase64);
 	let bin = "";
 	const lastOctetLength = expectedLength % 8;
 	for (let i = 0; i < binaryString.length; i++) {

@@ -32,13 +32,16 @@ export const serializeGrid = (
 	return parts.join("");
 };
 
+// TODO: use version, defined in RFC 4648, section 5,
+// omits the padding and replaces + and / with - and _.
+
 export const bareBin2base64 = (str: string): string => {
 	const bin = str.match(/.{1,8}/g);
 	if (!bin) return "";
 	const base64 = bin
 		.map((b) => String.fromCharCode(Number.parseInt(b, 2)))
 		.join("");
-	return btoa(base64);
+	return btoa(base64).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 };
 
 export const bin2base64 = (str: string, dimensions: Dimensions): string => {
@@ -47,7 +50,11 @@ export const bin2base64 = (str: string, dimensions: Dimensions): string => {
 	const base64 = bin
 		.map((b) => String.fromCharCode(Number.parseInt(b, 2)))
 		.join("");
-	return `${dimensions.width}x${dimensions.height}x${btoa(base64)}`;
+	const urlSafeBase64 = btoa(base64)
+		.replace(/\+/g, "-")
+		.replace(/\//g, "_")
+		.replace(/=/g, "");
+	return `${dimensions.width}x${dimensions.height}x${urlSafeBase64}`;
 };
 
 // @ts-expect-error: Keeping for reference
@@ -69,7 +76,16 @@ const base64ToBin = (base64: string, dimensions: Dimensions): string => {
 		Number.parseInt(width) +
 		Number.parseInt(height);
 	// console.log("base64Data:", base64Data);
-	const decoded = atob(base64Data);
+
+	// Convert URL-safe base64 back to standard base64
+	let standardBase64 = base64Data.replace(/-/g, "+").replace(/_/g, "/");
+
+	// Add padding if needed
+	while (standardBase64.length % 4) {
+		standardBase64 += "=";
+	}
+
+	const decoded = atob(standardBase64);
 	let bin = "";
 	const lastOctetLength = expectedLength % 8;
 	for (let i = 0; i < decoded.length; i++) {
