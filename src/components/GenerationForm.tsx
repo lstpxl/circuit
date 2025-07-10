@@ -7,11 +7,12 @@ import { useState } from "react";
 type GenerationFormProps = {
 	onParamGenerate: (data: GeneratorParams) => void;
 	onCodeGenerate: (code: string) => void;
+	initialCode?: string;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export default function GenerationForm(props: GenerationFormProps) {
-	const { onParamGenerate, onCodeGenerate, ...divProps } = props;
-	const [activeTab, setActiveTab] = useState("params");
+	const { onParamGenerate, onCodeGenerate, initialCode, ...divProps } = props;
+	const [activeTab, setActiveTab] = useState(initialCode ? "code" : "params");
 
 	return (
 		<div className="flex w-full max-w-2xl flex-col gap-2" {...divProps}>
@@ -25,7 +26,10 @@ export default function GenerationForm(props: GenerationFormProps) {
 				<ParamGenerationForm onGenerate={onParamGenerate} />
 			</div>
 			<div className={activeTab === "code" ? "block" : "hidden"}>
-				<CodeGenerationForm onGenerate={onCodeGenerate} />
+				<CodeGenerationForm
+					onGenerate={onCodeGenerate}
+					initialCode={initialCode}
+				/>
 			</div>
 		</div>
 	);

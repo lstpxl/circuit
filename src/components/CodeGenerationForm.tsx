@@ -11,14 +11,15 @@ type CodeFormData = {
 
 type CodeFormProps = {
 	onGenerate: (code: string) => void;
+	initialCode?: string;
 } & React.FormHTMLAttributes<HTMLFormElement>;
 
 export default function CodeGenerationForm(props: CodeFormProps) {
-	const { onGenerate, ...formProps } = props;
+	const { onGenerate, initialCode, ...formProps } = props;
 
 	const { control, handleSubmit, watch } = useForm<CodeFormData>({
 		defaultValues: {
-			code: "",
+			code: initialCode || "",
 		},
 	});
 

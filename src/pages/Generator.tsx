@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { GeneratorParams } from "../model/GeneratorParams.d.ts";
 import { createGrid } from "../model/Generator";
@@ -36,6 +36,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 			height: initialPatternData.height,
 		}),
 	);
+	const [validationError, setValidationError] = useState<string | null>(null);
 
 	const handleGenerateFromParams = (params: GeneratorParams) => {
 		const pattern = createGrid(params);
@@ -103,6 +104,32 @@ function Generator({ code: urlCode }: { code?: string }) {
 		}
 	};
 
+	useEffect(() => {
+		if (urlCode) {
+			const validated = validateCode(urlCode);
+			if (!validated) {
+				console.error("Invalid code format:", urlCode);
+				setValidationError("Invalid code");
+				return;
+			}
+			const { width, height } = validated || {
+				width: 1,
+				height: 1,
+				expectedLength: 6,
+				binary: "0".repeat(6),
+			};
+			const pattern = createGridFromCode(urlCode);
+			setPatternData({
+				width: width,
+				height: height || 1,
+				lines: pattern,
+			});
+			setCode(urlCode);
+		} else {
+			setValidationError(null);
+		}
+	}, [urlCode]);
+
 	return (
 		<div className="dark flex flex-col items-center gap-16">
 			<div className="flex flex-col items-center gap-4">
@@ -110,55 +137,64 @@ function Generator({ code: urlCode }: { code?: string }) {
 					id="frame"
 					className="relative border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px] group"
 				>
-					<Pattern data={patternData} drawParams={drawParams} />
-					<div className="absolute bottom-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-						<button
-							id="copy-code-button"
-							type="button"
-							onClick={handleCopyCode}
-							className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
-							title="Copy code"
-						>
-							<svg
-								width="16"
-								height="16"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="2"
-							>
-								<title>Copy code</title>
-								<rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-								<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-							</svg>
-						</button>
-						<button
-							id="download-svg-button"
-							type="button"
-							onClick={handleDownloadSVG}
-							className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
-							title="Download SVG"
-						>
-							<svg
-								width="16"
-								height="16"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="2"
-							>
-								<title>Download SVG</title>
-								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-								<polyline points="7,10 12,15 17,10" />
-								<line x1="12" y1="15" x2="12" y2="3" />
-							</svg>
-						</button>
-					</div>
+					{validationError && (
+						<div className="text-red-500 text-lg">{validationError}</div>
+					)}
+					{!validationError && (
+						<>
+							<Pattern data={patternData} drawParams={drawParams} />
+
+							<div className="absolute bottom-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+								<button
+									id="copy-code-button"
+									type="button"
+									onClick={handleCopyCode}
+									className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
+									title="Copy code"
+								>
+									<svg
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										strokeWidth="2"
+									>
+										<title>Copy code</title>
+										<rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+										<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+									</svg>
+								</button>
+								<button
+									id="download-svg-button"
+									type="button"
+									onClick={handleDownloadSVG}
+									className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
+									title="Download SVG"
+								>
+									<svg
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										strokeWidth="2"
+									>
+										<title>Download SVG</title>
+										<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+										<polyline points="7,10 12,15 17,10" />
+										<line x1="12" y1="15" x2="12" y2="3" />
+									</svg>
+								</button>
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 			<GenerationForm
 				onParamGenerate={handleGenerateFromParams}
 				onCodeGenerate={handleGenerateFromCode}
+				initialCode={urlCode}
 			/>
 			<LinkToHome />
 			<AuthorCredits />
