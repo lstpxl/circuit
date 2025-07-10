@@ -24,10 +24,121 @@ const initialPatternData: PatternDisplayData = {
 	lines: createGrid(defaultGeneratorParams),
 };
 
-function Generator({ code: urlCode }: { code?: string }) {
-	// TODO
-	console.log("code from URL:", urlCode);
+function SmallIconButton({
+	onClick,
+	icon,
+	...rest
+}: {
+	onClick: () => void;
+	icon: React.ReactNode;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+	return (
+		<button
+			type="button"
+			onClick={onClick}
+			className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
+			{...rest}
+		>
+			{icon}
+		</button>
+	);
+}
 
+function CopyCodeButton({ onClick }: { onClick: () => void }) {
+	return (
+		<SmallIconButton
+			id="copy-code-button"
+			onClick={onClick}
+			title="Copy code"
+			icon={
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				>
+					<title>Copy code</title>
+					<rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+					<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+				</svg>
+			}
+		/>
+	);
+}
+
+function CopyLinkButton({ code }: { code: string }) {
+	const handleCopyLink = async () => {
+		try {
+			const currentUrl = new URL(window.location.href);
+			const baseUrl = import.meta.env.VITE_BASE_URL || "/";
+			const generatePath = baseUrl.endsWith("/")
+				? `${baseUrl}generate`
+				: `${baseUrl}/generate`;
+			const shareableUrl = `${currentUrl.protocol}//${currentUrl.host}${generatePath}?code=${code}`;
+			await navigator.clipboard.writeText(shareableUrl);
+		} catch (err) {
+			console.error("Failed to copy link:", err);
+		}
+		const button = document.getElementById("copy-link-button");
+		if (button) {
+			button.style.opacity = "0";
+			setTimeout(() => {
+				button.style.opacity = "100%";
+			}, 1000);
+		}
+	};
+
+	return (
+		<SmallIconButton
+			id="copy-link-button"
+			onClick={handleCopyLink}
+			title="Copy link"
+			icon={
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				>
+					<title>Copy link</title>
+					<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+					<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+				</svg>
+			}
+		/>
+	);
+}
+
+function DownloadSVGButton({ onClick }: { onClick: () => void }) {
+	return (
+		<SmallIconButton
+			id="download-svg-button"
+			onClick={onClick}
+			title="Download SVG"
+			icon={
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				>
+					<title>Download SVG</title>
+					<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+					<polyline points="7,10 12,15 17,10" />
+					<line x1="12" y1="15" x2="12" y2="3" />
+				</svg>
+			}
+		/>
+	);
+}
+
+function Generator({ code: urlCode }: { code?: string }) {
 	const [patternData, setPatternData] =
 		useState<PatternDisplayData>(initialPatternData);
 	const [code, setCode] = useState<string>(
@@ -145,47 +256,9 @@ function Generator({ code: urlCode }: { code?: string }) {
 							<Pattern data={patternData} drawParams={drawParams} />
 
 							<div className="absolute bottom-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-								<button
-									id="copy-code-button"
-									type="button"
-									onClick={handleCopyCode}
-									className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
-									title="Copy code"
-								>
-									<svg
-										width="16"
-										height="16"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2"
-									>
-										<title>Copy code</title>
-										<rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-										<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-									</svg>
-								</button>
-								<button
-									id="download-svg-button"
-									type="button"
-									onClick={handleDownloadSVG}
-									className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
-									title="Download SVG"
-								>
-									<svg
-										width="16"
-										height="16"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2"
-									>
-										<title>Download SVG</title>
-										<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-										<polyline points="7,10 12,15 17,10" />
-										<line x1="12" y1="15" x2="12" y2="3" />
-									</svg>
-								</button>
+								<CopyCodeButton onClick={handleCopyCode} />
+								<CopyLinkButton code={code} />
+								<DownloadSVGButton onClick={handleDownloadSVG} />
 							</div>
 						</>
 					)}
