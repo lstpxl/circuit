@@ -37,6 +37,14 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Debug environment variables
+        run: |
+          echo "VITE_BASE_URL value: '$VITE_BASE_URL'"
+          echo "Repository variable: '${{ vars.VITE_BASE_URL }}'"
+          echo "All environment variables:"
+          env | grep VITE || echo "No VITE variables found"
+        env:
+          VITE_BASE_URL: ${{ vars.VITE_BASE_URL }}
       - name: Build
         run: npm run build
         env:
