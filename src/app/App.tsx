@@ -6,7 +6,7 @@ import {
 	createRoute,
 	createRootRoute,
 } from "@tanstack/react-router";
-// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import "../index.css";
 
@@ -17,7 +17,7 @@ const rootRoute = createRootRoute({
 	component: () => (
 		<>
 			<Outlet />
-			{/* <TanStackRouterDevtools /> */}
+			<TanStackRouterDevtools />
 		</>
 	),
 });
@@ -26,6 +26,8 @@ const indexRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: "/",
 	component: function Index() {
+		console.log("Index route loaded");
+		console.log("Current location:", window.location.href);
 		return <Home />;
 	},
 });
@@ -46,7 +48,10 @@ const generatorRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([indexRoute, generatorRoute]);
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+	routeTree,
+	basepath: import.meta.env.VITE_BASE_URL || "/",
+});
 
 declare module "@tanstack/react-router" {
 	interface Register {
