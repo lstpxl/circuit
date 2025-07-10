@@ -3,7 +3,7 @@ export default function Logo(props: { className?: string }) {
 	return (
 		<div className={`fixed top-4 z-50 ${className}`}>
 			<img
-				src="/circuit-large.svg"
+				src={`${import.meta.env.BASE_URL}circuit-large.svg`}
 				alt="Circuit Logo"
 				className="w-auto h-12 opacity-30"
 			/>
