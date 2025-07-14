@@ -1,10 +1,8 @@
-# Circuit
-
 ![Circuit](public/circuit-large.svg)
 
-## Line pattern generator
+# Circuit | Line pattern generator
 
-### Play with it [at Pages](https://lstpxl.github.io/circuit/)
+## Play with it [at Pages](https://lstpxl.github.io/circuit/)
 
 <!-- Playground at [https://lstpxl.github.io/circuit/](https://lstpxl.github.io/circuit/) -->
 
