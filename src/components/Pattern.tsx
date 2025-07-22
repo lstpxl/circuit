@@ -82,7 +82,6 @@ export default function Pattern({
 				data.height * drawParams.cellSize + drawParams.strokeWidth,
 			)
 			.addTo(`#pattern-${containerId}`);
-		// console.log("lines redraw");
 		drawPattern(draw, drawParams, data.lines);
 
 		return () => {
@@ -92,10 +91,6 @@ export default function Pattern({
 			}
 		};
 	});
-
-	// console.log("data", data);
-	// console.log("drawParams", drawParams);
-	console.log("Pattern rerender!");
 
 	return (
 		<div

@@ -7,7 +7,7 @@ export default function CodeText({ code }: { code: string }) {
 		try {
 			await navigator.clipboard.writeText(code);
 			setCopied(true);
-			setTimeout(() => setCopied(false), 1000); // Reset after 2 seconds
+			setTimeout(() => setCopied(false), 1000);
 		} catch (err) {
 			console.error("Failed to copy text: ", err);
 		}

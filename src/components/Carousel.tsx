@@ -35,12 +35,9 @@ function calculateInitSlidePosition(
 function arcY(x: number, containerDimensions: Dimensions): number {
 	const nX =
 		((x - containerDimensions.width / 2) / containerDimensions.width) * 0.5; // Normalize x to the range [0, 1]
-	// console.log("nX", nX);
 	const y = -Math.sqrt(1 - nX * nX);
-	// console.log("y", y);
 	const scale = containerDimensions.width * 4;
 	const result = -scale * (1 + y) - containerDimensions.height * 0.05;
-	// console.log("result", result);
 	return result;
 }
 
@@ -96,7 +93,6 @@ function updateSlidesY(
 	for (let i = 0; i < coords.length; i++) {
 		result.push({
 			x: coords[i].x,
-			// y: containerDimensions.height / 2 - slideDimensions[i].height / 2,
 			y:
 				arcY(
 					coords[i].x - STEP + slideDimensions[i].width / 2,
@@ -128,11 +124,10 @@ export default function Carousel() {
 	}, [coords]);
 
 	const myAnimate = useCallback(() => {
-		// console.log("animating!");
 		const newCoords = moveSlideOneStep(
 			slideDimensions,
 			containerDimensions,
-			coordsRef.current, // Use ref instead of state
+			coordsRef.current,
 		);
 		setCoords(newCoords);
 		animationRef.current = requestAnimationFrame(myAnimate);
@@ -186,16 +181,14 @@ export default function Carousel() {
 		if (
 			slideDimensions.length > 0 &&
 			containerDimensions.width > 0 &&
-			!initialPositionsSet.current // Use ref instead of coords.length === 0
+			!initialPositionsSet.current
 		) {
-			// console.log("coords.length:", coords.length);
-			// console.log("init");
 			const newCoords = calculateInitSlidePosition(
 				slideDimensions,
 				containerDimensions,
 			);
 			setCoords(newCoords);
-			initialPositionsSet.current = true; // Mark as set
+			initialPositionsSet.current = true;
 			console.log("Initial slide positions set:", newCoords);
 		}
 	}, [slideDimensions, containerDimensions]);
@@ -208,8 +201,6 @@ export default function Carousel() {
 			}
 		};
 	}, [myAnimate]);
-
-	// console.log("rerendering Carousel with dimensions:");
 
 	return (
 		<div className="w-full h-svh">
