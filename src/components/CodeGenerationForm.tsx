@@ -53,6 +53,14 @@ export default function CodeGenerationForm(props: CodeFormProps) {
 					/>
 				</div>
 
+				<Label
+					className="text-left w-full text-neutral-500 text-sm/6"
+					htmlFor="code_input"
+				>
+					You can copy BASE64-encoded pattern code or a link by hovering the
+					pattern. You can recreate the exact pattern by pasting the code here.
+				</Label>
+
 				<Button
 					type="submit"
 					disabled={!codeIsValid}
