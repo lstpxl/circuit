@@ -8,4 +8,4 @@
 
 ![Club City Hall façade](public/street-view-2.jpg)
 
-Inspired by Belgrade Club City Hall façade decor ([Google street view link](https://maps.app.goo.gl/B44u2bpYjzSQoiYg9))
+<!-- Inspired by Belgrade Club City Hall façade decor ([Google street view link](https://maps.app.goo.gl/B44u2bpYjzSQoiYg9)) -->
