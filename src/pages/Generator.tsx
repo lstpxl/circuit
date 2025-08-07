@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { GeneratorParams } from "../model/GeneratorParams.d.ts";
 import { createGrid } from "../model/Generator";
@@ -11,12 +11,9 @@ import { createGridFromCode, pattern2code } from "@/model/encode.ts";
 import AuthorCredits from "@/components/AuthorCredits.tsx";
 import Logo from "@/components/Logo.tsx";
 import LinkToHome from "@/components/LinkToHome.tsx";
-
-const drawParams = {
-	cellSize: 30,
-	strokeWidth: 4,
-	stroke: { color: "#f06", width: 4, linecap: "round" },
-};
+import SmallIconButton from "@/components/SmallIconButton.tsx";
+import { defaultDrawParams } from "@/model/defaultDrawParams.ts";
+import { useClipboard } from "@/components/hooks/useClipboard.ts";
 
 const initialPatternData: PatternDisplayData = {
 	width: defaultGeneratorParams.width,
@@ -24,32 +21,12 @@ const initialPatternData: PatternDisplayData = {
 	lines: createGrid(defaultGeneratorParams),
 };
 
-function SmallIconButton({
-	onClick,
-	icon,
-	...rest
-}: {
-	onClick: () => void;
-	icon: React.ReactNode;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-	return (
-		<button
-			type="button"
-			onClick={onClick}
-			className="bg-black/70 hover:bg-black/90 text-white p-2 rounded-md transition-colors cursor-pointer"
-			{...rest}
-		>
-			{icon}
-		</button>
-	);
-}
-
 function CopyCodeButton({ onClick }: { onClick: () => void }) {
 	return (
 		<SmallIconButton
-			id="copy-code-button"
 			onClick={onClick}
-			title="Copy code"
+			titleIdle="Copy code"
+			titleTriggered="Copied!"
 			icon={
 				<svg
 					width="16"
@@ -69,7 +46,7 @@ function CopyCodeButton({ onClick }: { onClick: () => void }) {
 }
 
 function CopyLinkButton({ code }: { code: string }) {
-	const [isLinkCopied, setIsLinkCopied] = useState(false);
+	const { copy } = useClipboard();
 
 	const handleCopyLink = async () => {
 		try {
@@ -79,9 +56,7 @@ function CopyLinkButton({ code }: { code: string }) {
 				? `${baseUrl}generate`
 				: `${baseUrl}/generate`;
 			const shareableUrl = `${currentUrl.protocol}//${currentUrl.host}${generatePath}?code=${code}`;
-			await navigator.clipboard.writeText(shareableUrl);
-			setIsLinkCopied(true);
-			setTimeout(() => setIsLinkCopied(false), 1000);
+			await copy(shareableUrl);
 		} catch (err) {
 			console.error("Failed to copy link:", err);
 		}
@@ -91,8 +66,8 @@ function CopyLinkButton({ code }: { code: string }) {
 		<SmallIconButton
 			id="copy-link-button"
 			onClick={handleCopyLink}
-			title={isLinkCopied ? "Copied!" : "Copy link"}
-			style={{ opacity: isLinkCopied ? 0.5 : 1 }}
+			titleIdle="Copy link"
+			titleTriggered="Copied!"
 			icon={
 				<svg
 					width="16"
@@ -114,9 +89,9 @@ function CopyLinkButton({ code }: { code: string }) {
 function DownloadSVGButton({ onClick }: { onClick: () => void }) {
 	return (
 		<SmallIconButton
-			id="download-svg-button"
 			onClick={onClick}
-			title="Download SVG"
+			titleIdle="Download SVG"
+			titleTriggered="Downloaded!"
 			icon={
 				<svg
 					width="16"
@@ -137,6 +112,7 @@ function DownloadSVGButton({ onClick }: { onClick: () => void }) {
 }
 
 function Generator({ code: urlCode }: { code?: string }) {
+	const { copy } = useClipboard();
 	const [patternData, setPatternData] =
 		useState<PatternDisplayData>(initialPatternData);
 	const [code, setCode] = useState<string>(
@@ -147,7 +123,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 	);
 	const [validationError, setValidationError] = useState<string | null>(null);
 
-	const handleGenerateFromParams = (params: GeneratorParams) => {
+	const handleGenerateFromParams = useCallback((params: GeneratorParams) => {
 		const pattern = createGrid(params);
 		setCode(
 			pattern2code(pattern, {
@@ -160,7 +136,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 			height: params.height,
 			lines: pattern,
 		});
-	};
+	}, []);
 
 	const handleGenerateFromCode = (newCode: string) => {
 		setCode(newCode);
@@ -175,7 +151,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 
 	const handleCopyCode = async () => {
 		try {
-			await navigator.clipboard.writeText(code);
+			await copy(code);
 			// TODO Use toast notification
 		} catch (err) {
 			console.error("Failed to copy code:", err);
@@ -193,7 +169,8 @@ function Generator({ code: urlCode }: { code?: string }) {
 			const svgUrl = URL.createObjectURL(svgBlob);
 			const downloadLink = document.createElement("a");
 			downloadLink.href = svgUrl;
-			downloadLink.download = "circuit-pattern.svg";
+			const hash = code.slice(0, 12);
+			downloadLink.download = `circuit-pattern-${hash}.svg`;
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
@@ -240,7 +217,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 					)}
 					{!validationError && (
 						<>
-							<Pattern data={patternData} drawParams={drawParams} />
+							<Pattern data={patternData} drawParams={defaultDrawParams} />
 
 							<div className="absolute bottom-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
 								<CopyCodeButton onClick={handleCopyCode} />

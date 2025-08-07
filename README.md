@@ -1,6 +1,6 @@
 ![Circuit](public/circuit-large.svg)
 
-# Circuit | Line pattern generator
+# **Circuit** · Line pattern generator
 
 ## Play with it [at Pages](https://lstpxl.github.io/circuit/)
 

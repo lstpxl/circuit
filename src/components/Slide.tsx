@@ -2,17 +2,18 @@ import { useRef, useState, useMemo } from "react";
 import { Pattern, type PatternDisplayData } from "./Pattern";
 import { createGrid } from "@/model/Generator";
 import type { WindDirection } from "@/model/GeneratorParams";
+import { defaultDrawParams } from "@/model/defaultDrawParams";
 
 type SlideProps = {
 	index: number;
 	style?: React.CSSProperties;
 };
 
-const drawParams = {
+/* const drawParams = {
 	cellSize: 30,
 	strokeWidth: 4,
 	stroke: { color: "#f06", width: 4, linecap: "round" },
-};
+}; */
 
 const windDirections: WindDirection[] = [
 	"none",
@@ -39,10 +40,12 @@ export default function Slide(props: SlideProps) {
 	});
 
 	const [width] = useState<number>(
-		randomParams.current.width * drawParams.cellSize + drawParams.strokeWidth,
+		randomParams.current.width * defaultDrawParams.cellSize +
+			defaultDrawParams.strokeWidth,
 	);
 	const [height] = useState<number>(
-		randomParams.current.height * drawParams.cellSize + drawParams.strokeWidth,
+		randomParams.current.height * defaultDrawParams.cellSize +
+			defaultDrawParams.strokeWidth,
 	);
 	const patternData = useRef<PatternDisplayData>({
 		width: randomParams.current.width,
@@ -58,7 +61,7 @@ export default function Slide(props: SlideProps) {
 	});
 
 	const memoizedPattern = useMemo(
-		() => <Pattern data={patternData.current} drawParams={drawParams} />,
+		() => <Pattern data={patternData.current} drawParams={defaultDrawParams} />,
 		[],
 	);
 
