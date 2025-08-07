@@ -1,4 +1,4 @@
-![Circuit](public/circuit-large.svg)
+<!-- ![Circuit](public/circuit-large.svg) -->
 
 # **Circuit** · Line pattern generator
 
