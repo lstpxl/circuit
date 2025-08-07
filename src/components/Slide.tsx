@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import Pattern, { type PatternDisplayData } from "./Pattern";
+import { Pattern, type PatternDisplayData } from "./Pattern";
 import { createGrid } from "@/model/Generator";
 import type { WindDirection } from "@/model/GeneratorParams";
 

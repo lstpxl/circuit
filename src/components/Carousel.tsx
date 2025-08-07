@@ -139,8 +139,6 @@ export default function Carousel() {
 				const { width, height } = containerRef.current.getBoundingClientRect();
 				setContainerDimensions({ width, height });
 
-				console.log("resize");
-
 				// Use ref to get current coords
 				const currentCoords = coordsRef.current;
 				if (currentCoords.length > 0) {
@@ -167,7 +165,6 @@ export default function Carousel() {
 				};
 			});
 			setSlideDimensions(dimensions);
-			console.log("Slide dimensions set:", dimensions);
 		}
 
 		window.addEventListener("resize", updateViewport);
@@ -189,7 +186,6 @@ export default function Carousel() {
 			);
 			setCoords(newCoords);
 			initialPositionsSet.current = true;
-			console.log("Initial slide positions set:", newCoords);
 		}
 	}, [slideDimensions, containerDimensions]);
 

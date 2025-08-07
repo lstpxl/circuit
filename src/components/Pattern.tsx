@@ -1,6 +1,6 @@
 import { SVG } from "@svgdotjs/svg.js";
 import type { Dir, Line } from "../model/Grid";
-import { useEffect, useId } from "react";
+import { memo, useEffect, useId } from "react";
 import type { Svg, Container } from "@svgdotjs/svg.js";
 
 export type PatternDisplayData = {
@@ -62,7 +62,7 @@ const drawPattern: DrawPattern = (draw, drawParams, pattern) => {
 	}
 };
 
-export default function Pattern({
+const Pattern = memo(function Pattern({
 	data,
 	drawParams,
 }: {
@@ -72,7 +72,7 @@ export default function Pattern({
 	const containerId = useId();
 
 	useEffect(() => {
-		const container = document.getElementById(`#pattern-${containerId}`);
+		const container = document.getElementById(`pattern-${containerId}`);
 		if (container) {
 			container.innerHTML = "";
 		}
@@ -85,12 +85,9 @@ export default function Pattern({
 		drawPattern(draw, drawParams, data.lines);
 
 		return () => {
-			const container = document.getElementById(`pattern-${containerId}`);
-			if (container) {
-				container.innerHTML = "";
-			}
+			draw.remove();
 		};
-	});
+	}, [data, drawParams, containerId]);
 
 	return (
 		<div
@@ -103,4 +100,6 @@ export default function Pattern({
 			className="box-content"
 		/>
 	);
-}
+});
+
+export { Pattern };

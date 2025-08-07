@@ -9,16 +9,16 @@ import {
 // import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import "../index.css";
-
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Generator from "@/pages/Generator";
 import Home from "@/pages/Home";
 
 const rootRoute = createRootRoute({
 	component: () => (
-		<>
+		<ErrorBoundary>
 			<Outlet />
 			{/* <TanStackRouterDevtools /> */}
-		</>
+		</ErrorBoundary>
 	),
 });
 
@@ -26,8 +26,6 @@ const indexRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: "/",
 	component: function Index() {
-		console.log("Index route loaded");
-		console.log("Current location:", window.location.href);
 		return <Home />;
 	},
 });
@@ -42,7 +40,11 @@ const generatorRoute = createRoute({
 	},
 	component: function GeneratorPage() {
 		const { code } = generatorRoute.useSearch();
-		return <Generator code={code} />;
+		return (
+			<ErrorBoundary>
+				<Generator code={code} />
+			</ErrorBoundary>
+		);
 	},
 });
 

@@ -5,7 +5,7 @@ import { createGrid } from "../model/Generator";
 import GenerationForm from "../components/GenerationForm";
 import { validateCode } from "../model/codeValidator";
 import type { PatternDisplayData } from "../components/Pattern";
-import Pattern from "../components/Pattern";
+import { Pattern } from "../components/Pattern";
 import { defaultGeneratorParams } from "@/model/defaultGeneratorParams.ts";
 import { createGridFromCode, pattern2code } from "@/model/encode.ts";
 import AuthorCredits from "@/components/AuthorCredits.tsx";
@@ -69,6 +69,8 @@ function CopyCodeButton({ onClick }: { onClick: () => void }) {
 }
 
 function CopyLinkButton({ code }: { code: string }) {
+	const [isLinkCopied, setIsLinkCopied] = useState(false);
+
 	const handleCopyLink = async () => {
 		try {
 			const currentUrl = new URL(window.location.href);
@@ -78,15 +80,10 @@ function CopyLinkButton({ code }: { code: string }) {
 				: `${baseUrl}/generate`;
 			const shareableUrl = `${currentUrl.protocol}//${currentUrl.host}${generatePath}?code=${code}`;
 			await navigator.clipboard.writeText(shareableUrl);
+			setIsLinkCopied(true);
+			setTimeout(() => setIsLinkCopied(false), 1000);
 		} catch (err) {
 			console.error("Failed to copy link:", err);
-		}
-		const button = document.getElementById("copy-link-button");
-		if (button) {
-			button.style.opacity = "0";
-			setTimeout(() => {
-				button.style.opacity = "100%";
-			}, 1000);
 		}
 	};
 
@@ -94,7 +91,8 @@ function CopyLinkButton({ code }: { code: string }) {
 		<SmallIconButton
 			id="copy-link-button"
 			onClick={handleCopyLink}
-			title="Copy link"
+			title={isLinkCopied ? "Copied!" : "Copy link"}
+			style={{ opacity: isLinkCopied ? 0.5 : 1 }}
 			icon={
 				<svg
 					width="16"
@@ -178,20 +176,15 @@ function Generator({ code: urlCode }: { code?: string }) {
 	const handleCopyCode = async () => {
 		try {
 			await navigator.clipboard.writeText(code);
+			// TODO Use toast notification
 		} catch (err) {
 			console.error("Failed to copy code:", err);
-		}
-		const button = document.getElementById("copy-code-button");
-		if (button) {
-			button.style.opacity = "0";
-			setTimeout(() => {
-				button.style.opacity = "100%";
-			}, 1000);
 		}
 	};
 
 	const handleDownloadSVG = () => {
-		const svgElement = document.querySelector("#frame svg");
+		const frame = document.getElementById("frame");
+		const svgElement = frame?.querySelector("svg");
 		if (svgElement) {
 			const svgData = new XMLSerializer().serializeToString(svgElement);
 			const svgBlob = new Blob([svgData], {
@@ -205,13 +198,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
 			URL.revokeObjectURL(svgUrl);
-		}
-		const button = document.getElementById("download-svg-button");
-		if (button) {
-			button.style.opacity = "0";
-			setTimeout(() => {
-				button.style.opacity = "100%";
-			}, 1000);
+			// TODO Use toast notification
 		}
 	};
 
