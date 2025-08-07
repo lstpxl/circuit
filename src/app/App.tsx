@@ -9,7 +9,7 @@ import {
 // import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import "../index.css";
-import ErrorBoundary from "@/components/ErrorBoundary";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Generator from "@/pages/Generator";
 import Home from "@/pages/Home";
 

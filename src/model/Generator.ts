@@ -176,27 +176,3 @@ export const createGrid = (generatorParams: GeneratorParams): Line[] => {
 	}
 	return result;
 };
-
-// @ts-expect-error: Keeping for reference
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const createGrid_v1 = (generatorParams: GeneratorParams): Line[] => {
-	const empty = getEmptyVertexGrid(
-		generatorParams.width,
-		generatorParams.height,
-	);
-	const flat = flattenedGrid(empty);
-	const fillRatio = 0.2;
-	const numberOfLines = Math.floor(flat.length * fillRatio);
-	const weights = flat.map((cell) =>
-		cell.dir === "a" || cell.dir === "e" ? 2 : 1,
-	);
-	const result: Line[] = [];
-	for (let i = 0; i < numberOfLines; i++) {
-		const randomIndex = weightedChoice(weights);
-		flat[randomIndex].status = true;
-		result.push(flat[randomIndex]);
-		flat.splice(randomIndex, 1);
-		weights.splice(randomIndex, 1);
-	}
-	return result;
-};

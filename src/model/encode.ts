@@ -1,6 +1,12 @@
-import { validateCode } from "./codeValidator";
+import { validateCodeStrict } from "./codeValidator";
 import { flattenedGrid, getEmptyVertexGrid } from "./Generator";
 import type { Dimensions, Dir, Line } from "./Grid";
+import {
+	GridCreationError,
+	EncodingError,
+	ValidationError,
+	InvalidCodeError,
+} from "./errors";
 
 export const serializeGrid = (
 	lines: Line[],
@@ -36,8 +42,11 @@ export const serializeGrid = (
 // omits the padding and replaces + and / with - and _.
 
 export const bareBin2base64 = (str: string): string => {
+	if (!str) return "";
+
 	const bin = str.match(/.{1,8}/g);
-	if (!bin) return "";
+	if (!bin || bin.length === 0) return "";
+
 	const base64 = bin
 		.map((b) => String.fromCharCode(Number.parseInt(b, 2)))
 		.join("");
@@ -57,46 +66,6 @@ export const bin2base64 = (str: string, dimensions: Dimensions): string => {
 	return `${dimensions.width}x${dimensions.height}x${urlSafeBase64}`;
 };
 
-// @ts-expect-error: Keeping for reference
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const base64ToBin = (base64: string, dimensions: Dimensions): string => {
-	const match = base64.match(/^(\d+)x(\d+)x(.+)$/);
-	if (!match) {
-		throw new Error("Invalid base64 format");
-	}
-	const [, width, height, base64Data] = match;
-	if (
-		Number.parseInt(width) !== dimensions.width ||
-		Number.parseInt(height) !== dimensions.height
-	) {
-		throw new Error("Grid dimensions do not match");
-	}
-	const expectedLength =
-		4 * Number.parseInt(width) * Number.parseInt(height) +
-		Number.parseInt(width) +
-		Number.parseInt(height);
-
-	// Convert URL-safe base64 back to standard base64
-	let standardBase64 = base64Data.replace(/-/g, "+").replace(/_/g, "/");
-
-	// Add padding if needed
-	while (standardBase64.length % 4) {
-		standardBase64 += "=";
-	}
-
-	const decoded = atob(standardBase64);
-	let bin = "";
-	const lastOctetLength = expectedLength % 8;
-	for (let i = 0; i < decoded.length; i++) {
-		if (i === decoded.length - 1 && lastOctetLength > 0) {
-			bin += decoded.charCodeAt(i).toString(2).padStart(lastOctetLength, "0");
-		} else {
-			bin += decoded.charCodeAt(i).toString(2).padStart(8, "0");
-		}
-	}
-	return bin;
-};
-
 export type Pattern2Code = (pattern: Line[], dimensions: Dimensions) => string;
 export const pattern2code: Pattern2Code = (pattern, dimensions) => {
 	const binary = serializeGrid(pattern, dimensions);
@@ -104,43 +73,106 @@ export const pattern2code: Pattern2Code = (pattern, dimensions) => {
 	return code;
 };
 
-export const createGridFromCode = (code: string): Line[] => {
-	const parsed = validateCode(code);
-	if (!parsed) {
-		throw new Error("Invalid code format");
-	}
+type CreateGridResult = {
+	lines: Line[];
+	dimensions: Dimensions;
+};
+
+export const createGridFromCode = (code: string): CreateGridResult => {
 	try {
+		const parsed = validateCodeStrict(code);
+
 		const empty = getEmptyVertexGrid(parsed.width, parsed.height);
 		const dimensions: Dimensions = {
 			width: parsed.width,
 			height: parsed.height,
 		};
+
+		// Validate binary string length
+		const expectedLength =
+			4 * dimensions.width * dimensions.height +
+			2 * dimensions.width +
+			dimensions.height;
+		// const expectedBase64Length = Math.ceil(expectedLength / 6) * 6;
+		if (
+			parsed.binary.length < expectedLength ||
+			parsed.binary.length !== expectedLength
+		) {
+			throw new GridCreationError(
+				`Binary string length mismatch. Expected ${expectedLength}, got ${parsed.binary.length}`,
+				code,
+				dimensions,
+			);
+		}
+
 		// Set status of lines based on the binary string
 		const queue = parsed.binary.split("");
+
+		// try {
 		for (let y = 0; y < dimensions.height; y++) {
 			for (let x = 0; x < dimensions.width; x++) {
 				for (const dir of ["r", "d", "a", "e"] as Dir[]) {
-					const status = Number.parseInt(queue.shift() || "0") === 1;
+					const bitValue = queue.shift();
+					if (bitValue === undefined) {
+						throw new EncodingError(
+							`Unexpected end of binary data at position (${x}, ${y}, ${dir})`,
+							"deserialize",
+						);
+					}
+					const status = Number.parseInt(bitValue) === 1;
 					empty[y][x][dir] = status;
 				}
 			}
-			const status = Number.parseInt(queue.shift() || "0") === 1;
+			const bitValue = queue.shift();
+			if (bitValue === undefined) {
+				throw new EncodingError(
+					`Unexpected end of binary data at edge position (${dimensions.width}, ${y})`,
+					"deserialize",
+				);
+			}
+			const status = Number.parseInt(bitValue) === 1;
 			empty[y][dimensions.width].d = status;
 		}
+
 		for (let x = 0; x < dimensions.width; x++) {
-			const status1 = Number.parseInt(queue.shift() || "0") === 1;
+			const bitValue1 = queue.shift();
+			const bitValue2 = queue.shift();
+			if (bitValue1 === undefined || bitValue2 === undefined) {
+				throw new EncodingError(
+					`Unexpected end of binary data at bottom edge position (${x}, ${dimensions.height})`,
+					"deserialize",
+				);
+			}
+			const status1 = Number.parseInt(bitValue1) === 1;
+			const status2 = Number.parseInt(bitValue2) === 1;
 			empty[dimensions.height][x].a = status1;
-			const status = Number.parseInt(queue.shift() || "0") === 1;
-			empty[dimensions.height][x].r = status;
+			empty[dimensions.height][x].r = status2;
 		}
 
 		// Convert the grid to a flat array of lines
 		const flat = flattenedGrid(empty);
-		return flat;
+		return {
+			lines: flat,
+			dimensions,
+		};
 	} catch (error) {
-		if (error instanceof Error) {
-			throw new Error(`Failed to create grid from code: ${error.message}`);
+		if (error instanceof ValidationError) {
+			/* console.error(`${error.field}: ${error.message}`);
+			if (error.constraint) {
+				console.error(`Expected: ${error.constraint}`);
+			} */
+			throw new InvalidCodeError(error.message, code, error.constraint);
 		}
-		throw new Error("Failed to create grid from code: Unknown error");
+
+		if (error instanceof GridCreationError || error instanceof EncodingError) {
+			throw error; // Re-throw our custom errors
+		}
+
+		throw new GridCreationError(
+			`Failed to create grid from code: ${
+				error instanceof Error ? error.message : "Unknown error"
+			}`,
+			code,
+		);
 	}
 };

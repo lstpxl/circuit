@@ -1,19 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-
-import type { GeneratorParams } from "../model/GeneratorParams.d.ts";
+import { useEffect } from "react";
 import { createGrid } from "../model/Generator";
 import GenerationForm from "../components/GenerationForm";
-import { validateCode } from "../model/codeValidator";
 import type { PatternDisplayData } from "../components/Pattern";
 import { Pattern } from "../components/Pattern";
 import { defaultGeneratorParams } from "@/model/defaultGeneratorParams.ts";
-import { createGridFromCode, pattern2code } from "@/model/encode.ts";
 import AuthorCredits from "@/components/AuthorCredits.tsx";
 import Logo from "@/components/Logo.tsx";
 import LinkToHome from "@/components/LinkToHome.tsx";
 import SmallIconButton from "@/components/SmallIconButton.tsx";
 import { defaultDrawParams } from "@/model/defaultDrawParams.ts";
 import { useClipboard } from "@/components/hooks/useClipboard.ts";
+import { usePatternGenerator } from "@/components/hooks/usePatternGenerator.ts";
 
 const initialPatternData: PatternDisplayData = {
 	width: defaultGeneratorParams.width,
@@ -113,46 +110,17 @@ function DownloadSVGButton({ onClick }: { onClick: () => void }) {
 
 function Generator({ code: urlCode }: { code?: string }) {
 	const { copy } = useClipboard();
-	const [patternData, setPatternData] =
-		useState<PatternDisplayData>(initialPatternData);
-	const [code, setCode] = useState<string>(
-		pattern2code(initialPatternData.lines, {
-			width: initialPatternData.width,
-			height: initialPatternData.height,
-		}),
-	);
-	const [validationError, setValidationError] = useState<string | null>(null);
-
-	const handleGenerateFromParams = useCallback((params: GeneratorParams) => {
-		const pattern = createGrid(params);
-		setCode(
-			pattern2code(pattern, {
-				width: params.width,
-				height: params.height,
-			}),
-		);
-		setPatternData({
-			width: params.width,
-			height: params.height,
-			lines: pattern,
-		});
-	}, []);
-
-	const handleGenerateFromCode = (newCode: string) => {
-		setCode(newCode);
-		const pattern = createGridFromCode(newCode);
-		const { width, height } = validateCode(newCode) || { width: 1 };
-		setPatternData({
-			width: width,
-			height: height || 1,
-			lines: pattern,
-		});
-	};
+	const {
+		patternData,
+		code,
+		validationError,
+		generateFromParams,
+		generateFromCode,
+	} = usePatternGenerator(initialPatternData);
 
 	const handleCopyCode = async () => {
 		try {
 			await copy(code);
-			// TODO Use toast notification
 		} catch (err) {
 			console.error("Failed to copy code:", err);
 		}
@@ -175,35 +143,14 @@ function Generator({ code: urlCode }: { code?: string }) {
 			downloadLink.click();
 			document.body.removeChild(downloadLink);
 			URL.revokeObjectURL(svgUrl);
-			// TODO Use toast notification
 		}
 	};
 
 	useEffect(() => {
 		if (urlCode) {
-			const validated = validateCode(urlCode);
-			if (!validated) {
-				console.error("Invalid code format:", urlCode);
-				setValidationError("Invalid code");
-				return;
-			}
-			const { width, height } = validated || {
-				width: 1,
-				height: 1,
-				expectedLength: 6,
-				binary: "0".repeat(6),
-			};
-			const pattern = createGridFromCode(urlCode);
-			setPatternData({
-				width: width,
-				height: height || 1,
-				lines: pattern,
-			});
-			setCode(urlCode);
-		} else {
-			setValidationError(null);
+			generateFromCode(urlCode);
 		}
-	}, [urlCode]);
+	}, [urlCode, generateFromCode]);
 
 	return (
 		<div className="dark flex flex-col items-center gap-16">
@@ -229,8 +176,8 @@ function Generator({ code: urlCode }: { code?: string }) {
 				</div>
 			</div>
 			<GenerationForm
-				onParamGenerate={handleGenerateFromParams}
-				onCodeGenerate={handleGenerateFromCode}
+				onParamGenerate={generateFromParams}
+				onCodeGenerate={generateFromCode}
 				initialCode={urlCode}
 			/>
 			<LinkToHome />

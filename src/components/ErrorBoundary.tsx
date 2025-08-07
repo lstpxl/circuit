@@ -1,4 +1,6 @@
 import React from "react";
+import { InvalidCodeError, GridCreationError } from "@/model/errors";
+import DefaultErrorFallback from "./DefaultErrorFallback";
 
 interface ErrorBoundaryState {
 	hasError: boolean;
@@ -35,49 +37,51 @@ export class ErrorBoundary extends React.Component<
 
 	render() {
 		if (this.state.hasError) {
-			if (this.props.fallback) {
-				const FallbackComponent = this.props.fallback;
+			if (this.state.error instanceof InvalidCodeError) {
 				return (
-					<FallbackComponent
-						error={this.state.error}
-						retry={this.handleRetry}
-					/>
+					<div className="error-boundary">
+						<h2>Invalid Pattern Code</h2>
+						<p>The pattern code you entered is not valid.</p>
+						<details>
+							<summary>Expected format</summary>
+							<code>{this.state.error.expectedFormat}</code>
+						</details>
+						<button
+							type="button"
+							onClick={() => this.setState({ hasError: false })}
+						>
+							Try Again
+						</button>
+					</div>
 				);
 			}
 
-			return (
-				<div className="flex flex-col items-center justify-center p-8 text-center">
-					<div className="text-red-500 p-6 border border-red-300 rounded-lg bg-red-50 dark:bg-red-950/20 max-w-md">
-						<h2 className="text-lg font-semibold mb-2">Something went wrong</h2>
-						<p className="text-sm mb-4">
-							There was an error generating the pattern. This might be due to
-							invalid code or a technical issue.
-						</p>
-						<div className="flex gap-2 justify-center">
-							<button
-								type="button"
-								onClick={this.handleRetry}
-								className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-							>
-								Try Again
-							</button>
-							<button
-								type="button"
-								onClick={() => {
-									window.location.href = "/";
-								}}
-								className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
-							>
-								Go Home
-							</button>
-						</div>
+			if (this.state.error instanceof GridCreationError) {
+				return (
+					<div className="error-boundary">
+						<h2>Pattern Generation Failed</h2>
+						<p>Unable to create pattern from the provided code.</p>
+						{this.state.error.dimensions && (
+							<p>
+								Dimensions: {this.state.error.dimensions.width}×
+								{this.state.error.dimensions.height}
+							</p>
+						)}
+						<button
+							type="button"
+							onClick={() => this.setState({ hasError: false })}
+						>
+							Try Again
+						</button>
 					</div>
-				</div>
-			);
+				);
+			}
+
+			// Generic fallback
+			const Fallback = this.props.fallback ?? DefaultErrorFallback;
+			return <Fallback error={this.state.error} retry={this.handleRetry} />;
 		}
 
 		return this.props.children;
 	}
 }
-
-export default ErrorBoundary;
