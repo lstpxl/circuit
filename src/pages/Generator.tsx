@@ -182,7 +182,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 			/>
 			<LinkToHome />
 			<AuthorCredits />
-			<Logo className="left-4" />
+			<Logo className="left-8 bottom-4" />
 		</div>
 	);
 }

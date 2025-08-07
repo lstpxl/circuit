@@ -21,7 +21,7 @@ export default function Home() {
 			>
 				Make your own!
 			</Link>
-			<Logo />
+			<Logo className="top-[10vh]" />
 			<Art />
 			<AuthorCredits />
 		</div>
