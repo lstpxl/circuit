@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 artwork/icon-v1.afphoto~lock~
+
+coverage
+coverage/*
