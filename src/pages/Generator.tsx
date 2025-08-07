@@ -157,7 +157,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 			<div className="flex flex-col items-center gap-4">
 				<div
 					id="frame"
-					className="relative border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px] group"
+					className="relative border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px] group bg-neutral-800"
 				>
 					{validationError && (
 						<div className="text-red-500 text-lg">{validationError}</div>
