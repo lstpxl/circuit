@@ -37,6 +37,8 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Run tests
+        run: npm test
       - name: Debug environment variables
         run: |
           echo "VITE_BASE_URL value: '$VITE_BASE_URL'"
