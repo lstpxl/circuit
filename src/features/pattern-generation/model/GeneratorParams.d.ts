@@ -1,12 +1,3 @@
-export type WindDirection =
-	| "none"
-	| "vertical"
-	| "horizontal"
-	| "backslash"
-	| "slash"
-	| "orthogonal"
-	| "diagonal";
-
 export type GeneratorParams = {
 	width: number;
 	height: number;

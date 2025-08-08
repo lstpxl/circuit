@@ -1,5 +1,6 @@
 import { weightedChoice } from "./weightedChoice";
-import type { GeneratorParams } from "../../../entities/pattern/model/GeneratorParams";
+import type { GeneratorParams } from "./GeneratorParams.d";
+import { WindDirection } from "./WindDirection.d";
 import type {
 	Dimensions,
 	Dir,
@@ -8,6 +9,7 @@ import type {
 	LineCoords,
 	VertexCoords,
 } from "../../../entities/pattern/model/Grid";
+import type { PatternDisplayable } from "@/entities/pattern";
 
 export const getEmptyVertexGrid = (
 	gridWidth: number,
@@ -130,10 +132,10 @@ const weightCallback = (dir: Dir, generatorParams: GeneratorParams): number => {
 		if (generatorParams.direction === "horizontal") {
 			return dir === "r" ? generatorParams.strength / 10 : 1;
 		}
-		if (generatorParams.direction === "backslash") {
+		if (generatorParams.direction === "diagonal-backslash") {
 			return dir === "e" ? generatorParams.strength / 10 : 1;
 		}
-		if (generatorParams.direction === "slash") {
+		if (generatorParams.direction === "diagonal-slash") {
 			return dir === "a" ? generatorParams.strength / 10 : 1;
 		}
 		if (generatorParams.direction === "orthogonal") {
@@ -175,4 +177,26 @@ export const createGrid = (generatorParams: GeneratorParams): Line[] => {
 		weights.splice(randomIndex, 1);
 	}
 	return result;
+};
+
+export const getRandomWindDirection = (): WindDirection => {
+	const values = Object.values(WindDirection);
+	return values[Math.floor(Math.random() * values.length)];
+};
+
+export const createPatternDisplayable = (
+	params: GeneratorParams,
+): PatternDisplayable => {
+	return {
+		width: params.width,
+		height: params.height,
+		lines: createGrid({
+			width: params.width,
+			height: params.height,
+			cohesion: params.cohesion,
+			direction: params.direction,
+			strength: params.strength,
+			density: params.density,
+		}),
+	};
 };

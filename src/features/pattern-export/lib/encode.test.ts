@@ -1,4 +1,4 @@
-import { createGridFromCode } from "@/features/pattern-generation/model/encode";
+import { createGridFromCode } from "@/features/pattern-export/lib/encode";
 import { InvalidCodeError } from "../../../entities/pattern/model/errors";
 
 describe("Pattern Encoding/Decoding", () => {

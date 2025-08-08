@@ -6,7 +6,7 @@ import {
 	useLayoutEffect,
 } from "react";
 import type { Dimensions } from "@/entities/pattern/model/Grid";
-import Slide from "@/entities/slide/Slide";
+import { Slide } from "@/entities/slide/ui/Slide";
 
 type Coords = {
 	x: number;

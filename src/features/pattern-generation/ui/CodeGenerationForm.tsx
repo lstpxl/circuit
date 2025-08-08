@@ -3,7 +3,7 @@ import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
 import { Card } from "@/shared/ui/card";
-import { validateCode } from "@/features/pattern-generation/model/codeValidator";
+import { validateCode } from "@/features/pattern-export/lib/codeValidator";
 
 type CodeFormData = {
 	code: string;

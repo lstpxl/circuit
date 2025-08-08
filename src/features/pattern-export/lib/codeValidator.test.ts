@@ -3,9 +3,9 @@ import {
 	validateCode,
 	validateCodeStrict,
 	getDimensionsFromCode,
-} from "../../pattern-generation/model/codeValidator";
+} from "./codeValidator";
 import { ValidationError } from "../../../entities/pattern/model/errors";
-import { pattern2code } from "@/features/pattern-generation/model/encode";
+import { pattern2code } from "@/features/pattern-export/lib/encode";
 
 describe("Code Validation", () => {
 	// Generate a real valid code for testing

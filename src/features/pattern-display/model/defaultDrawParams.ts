@@ -1,4 +1,6 @@
-export const defaultDrawParams = {
+import type { DrawParams } from "./DrawParams";
+
+export const defaultDrawParams: DrawParams = {
 	cellSize: 30,
 	strokeWidth: 4,
 	stroke: { color: "#f06", width: 4, linecap: "round" },

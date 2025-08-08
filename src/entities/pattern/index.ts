@@ -1,8 +1,8 @@
-export type { Grid } from "./model/Grid";
-export type { GeneratorParams } from "./model/GeneratorParams.d";
+export type * from "./model/Grid";
 export {
 	InvalidCodeError,
 	GridCreationError,
 	EncodingError,
 	ValidationError,
 } from "./model/errors";
+export type { PatternDisplayable } from "./model/PatternDisplayable";

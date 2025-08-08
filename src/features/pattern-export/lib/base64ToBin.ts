@@ -1,6 +1,6 @@
-// @ts-expect-error: Keeping for reference
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const base64ToBin = (base64: string, dimensions: Dimensions): string => {
+import type { Dimensions } from "@/entities/pattern";
+
+export const base64ToBin = (base64: string, dimensions: Dimensions): string => {
 	const match = base64.match(/^(\d+)x(\d+)x(.+)$/);
 	if (!match) {
 		throw new Error("Invalid base64 format");

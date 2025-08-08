@@ -4,7 +4,7 @@ import { Label } from "@/shared/ui/label";
 import { Slider } from "@/shared/ui/slider";
 import { Button } from "@/shared/ui/button";
 import { Card } from "@/shared/ui/card";
-import type { GeneratorParams } from "@/entities/pattern/model/GeneratorParams";
+import type { GeneratorParams } from "@/features/pattern-generation/model/GeneratorParams";
 import { defaultGeneratorParams } from "@/features/pattern-generation/model/defaultGeneratorParams";
 import AccentDirToggleGroup from "./AccentDirToggleGroup";
 

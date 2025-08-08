@@ -1,3 +1,8 @@
+/**
+ * Selects a random index based on weighted probabilities
+ * @param weights Array of positive weights
+ * @returns Non-negative integer index (0 <= result < weights.length)
+ */
 export function weightedChoice(weights: number[]): number {
 	// Compute prefix sums
 	const prefixSums = [];

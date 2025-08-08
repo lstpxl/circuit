@@ -1,5 +1,5 @@
 export { Pattern } from "./ui/Pattern";
 export { Carousel } from "./ui/Carousel";
-export type { DrawParams } from "./model/DrawParams";
-export type { PatternDisplayData } from "./model/PatternDisplayData";
+export type { DrawParams } from "./model/DrawParams.d";
+
 export { defaultDrawParams } from "./model/defaultDrawParams";

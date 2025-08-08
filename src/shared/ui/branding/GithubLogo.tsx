@@ -1,4 +1,4 @@
-export default function GithubLogo() {
+export function GithubLogo() {
 	return (
 		<svg
 			width="16"

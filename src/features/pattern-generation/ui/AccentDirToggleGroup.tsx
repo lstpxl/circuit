@@ -57,7 +57,7 @@ export default function AccentDirToggleGroup({
 					<line x1="12" y1="3" x2="12" y2="21" />
 				</svg>
 			</ToggleGroupItem>
-			<ToggleGroupItem value="backslash" aria-label="Toggle backslash">
+			<ToggleGroupItem value="diagonal-backslash" aria-label="Toggle backslash">
 				<svg
 					width="16"
 					height="16"
@@ -70,7 +70,7 @@ export default function AccentDirToggleGroup({
 					<line x1="7" y1="7" x2="17" y2="17" />
 				</svg>
 			</ToggleGroupItem>
-			<ToggleGroupItem value="slash" aria-label="Toggle slash">
+			<ToggleGroupItem value="diagonal-slash" aria-label="Toggle slash">
 				<svg
 					width="16"
 					height="16"

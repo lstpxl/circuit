@@ -1,4 +1,4 @@
-export type PatternDisplayData = {
+export type PatternDisplayable = {
 	width: number;
 	height: number;
 	lines: Line[];

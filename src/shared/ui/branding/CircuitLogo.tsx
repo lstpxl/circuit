@@ -1,4 +1,4 @@
-export default function CircuitLogo(props: { className?: string }) {
+export function CircuitLogo(props: { className?: string }) {
 	const { className = "" } = props;
 	return (
 		<div className={`fixed z-50 ${className}`}>

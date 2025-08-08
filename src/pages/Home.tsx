@@ -1,10 +1,10 @@
-import Art from "@/widgets/HeroSection";
-import AuthorCredits from "@/widgets/AuthorCredits";
-import Logo from "@/widgets/CircuitLogo";
 import { buttonVariants } from "@/shared/ui/buttonVariants";
 import { cn } from "@/shared/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { Carousel } from "@/features/pattern-display";
+import { CircuitLogo } from "@/shared/ui/branding";
+import { AuthorCredits } from "@/widgets/AuthorCredits";
+import { HeroSection } from "@/widgets/HeroSection";
 
 export default function Home() {
 	return (
@@ -21,8 +21,8 @@ export default function Home() {
 			>
 				Make your own!
 			</Link>
-			<Logo className="top-[10vh]" />
-			<Art />
+			<CircuitLogo className="top-[10vh]" />
+			<HeroSection />
 			<AuthorCredits />
 		</div>
 	);

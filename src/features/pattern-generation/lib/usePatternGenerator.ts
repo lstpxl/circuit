@@ -3,18 +3,18 @@ import { createGrid } from "@/features/pattern-generation/model/Generator";
 import {
 	createGridFromCode,
 	pattern2code,
-} from "@/features/pattern-generation/model/encode";
+} from "@/features/pattern-export/lib/encode";
 import {
 	InvalidCodeError,
 	GridCreationError,
 	EncodingError,
 } from "@/entities/pattern/model/errors";
-import type { GeneratorParams } from "@/entities/pattern/model/GeneratorParams";
-import type { PatternDisplayData } from "@/features/pattern-display/ui/Pattern";
+import type { GeneratorParams } from "@/features/pattern-generation/model/GeneratorParams";
+import type { PatternDisplayable } from "@/entities/pattern";
 
-export function usePatternGenerator(initialPattern: PatternDisplayData) {
+export function usePatternGenerator(initialPattern: PatternDisplayable) {
 	const [patternData, setPatternData] =
-		useState<PatternDisplayData>(initialPattern);
+		useState<PatternDisplayable>(initialPattern);
 	const [code, setCode] = useState<string>(
 		pattern2code(initialPattern.lines, {
 			width: initialPattern.width,

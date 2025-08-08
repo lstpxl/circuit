@@ -3,7 +3,7 @@ import type { Dir, Line } from "../../../entities/pattern/model/Grid";
 import { memo, useEffect, useId } from "react";
 import type { Svg, Container } from "@svgdotjs/svg.js";
 import type { DrawParams } from "../model/DrawParams";
-import type { PatternDisplayData } from "../model/PatternDisplayData";
+import type { PatternDisplayable } from "@/entities/pattern";
 
 type DrawLine = (
 	draw: Svg | Container,
@@ -56,7 +56,7 @@ export const Pattern = memo(function Pattern({
 	data,
 	drawParams,
 }: {
-	data: PatternDisplayData;
+	data: PatternDisplayable;
 	drawParams: DrawParams;
 }) {
 	const containerId = useId();

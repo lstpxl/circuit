@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import type { GeneratorParams } from "@/entities/pattern/model/GeneratorParams";
+import type { GeneratorParams } from "@/features/pattern-generation/model/GeneratorParams";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { CodeGenerationForm, ParamGenerationForm } from "..";
 
