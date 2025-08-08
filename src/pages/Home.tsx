@@ -1,10 +1,10 @@
-import Art from "@/components/Art";
-import AuthorCredits from "@/components/AuthorCredits";
-import Carousel from "@/components/Carousel";
-import Logo from "@/components/Logo";
-import { buttonVariants } from "@/components/ui/buttonVariants";
-import { cn } from "@/lib/utils.ts";
+import Art from "@/widgets/HeroSection";
+import AuthorCredits from "@/widgets/AuthorCredits";
+import Logo from "@/widgets/CircuitLogo";
+import { buttonVariants } from "@/shared/ui/buttonVariants";
+import { cn } from "@/shared/lib/utils";
 import { Link } from "@tanstack/react-router";
+import Carousel from "@/features/pattern-display/ui/Carousel";
 
 export default function Home() {
 	return (

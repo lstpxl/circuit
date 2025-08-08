@@ -1,16 +1,16 @@
 import { useEffect } from "react";
-import { createGrid } from "../model/Generator";
-import GenerationForm from "../components/GenerationForm";
-import type { PatternDisplayData } from "../components/Pattern";
-import { Pattern } from "../components/Pattern";
+import { createGrid } from "../features/pattern-generation/model/Generator";
+import GenerationForm from "@/features/pattern-generation/ui/GenerationForm";
+import type { PatternDisplayData } from "../features/pattern-display/ui/Pattern";
+import { Pattern } from "../features/pattern-display/ui/Pattern";
 import { defaultGeneratorParams } from "@/model/defaultGeneratorParams.ts";
-import AuthorCredits from "@/components/AuthorCredits.tsx";
-import Logo from "@/components/Logo.tsx";
-import LinkToHome from "@/components/LinkToHome.tsx";
-import SmallIconButton from "@/components/SmallIconButton.tsx";
-import { defaultDrawParams } from "@/model/defaultDrawParams.ts";
-import { useClipboard } from "@/components/hooks/useClipboard.ts";
-import { usePatternGenerator } from "@/components/hooks/usePatternGenerator.ts";
+import AuthorCredits from "@/widgets/AuthorCredits";
+import Logo from "@/widgets/CircuitLogo";
+import LinkToHome from "@/widgets/LinkToHomePage";
+import SmallIconButton from "@/shared/ui/SmallIconButton";
+import { defaultDrawParams } from "@/features/pattern-display/model/defaultDrawParams";
+import { useClipboard } from "@/features/pattern-export/lib/useClipboard";
+import { usePatternGenerator } from "@/features/pattern-generation/lib/usePatternGenerator";
 
 const initialPatternData: PatternDisplayData = {
 	width: defaultGeneratorParams.width,

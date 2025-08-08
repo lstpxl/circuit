@@ -1,4 +1,3 @@
-// import React from "react";
 import {
 	Outlet,
 	RouterProvider,
@@ -8,10 +7,10 @@ import {
 } from "@tanstack/react-router";
 // import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import "../index.css";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import "./index.css";
 import Generator from "@/pages/Generator";
 import Home from "@/pages/Home";
+import { ErrorBoundary } from "@/shared/ui/error-boundary/ErrorBoundary";
 
 const rootRoute = createRootRoute({
 	component: () => (

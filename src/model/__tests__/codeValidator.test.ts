@@ -1,10 +1,10 @@
 import { pattern2code } from "../encode";
-import { createGrid } from "../Generator";
+import { createGrid } from "../../features/pattern-generation/model/Generator";
 import {
 	validateCode,
 	validateCodeStrict,
 	getDimensionsFromCode,
-} from "../codeValidator";
+} from "../../features/pattern-generation/model/codeValidator";
 import { ValidationError } from "../errors";
 
 describe("Code Validation", () => {
