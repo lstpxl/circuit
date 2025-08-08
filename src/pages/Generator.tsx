@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { createGrid } from "../features/pattern-generation/model/Generator";
-import GenerationForm from "@/features/pattern-generation/ui/GenerationForm";
-import type { PatternDisplayData } from "../features/pattern-display/ui/Pattern";
 import { Pattern } from "../features/pattern-display/ui/Pattern";
 import { defaultGeneratorParams } from "@/features/pattern-generation/model/defaultGeneratorParams";
 import AuthorCredits from "@/widgets/AuthorCredits";
@@ -11,6 +9,8 @@ import SmallIconButton from "@/shared/ui/SmallIconButton";
 import { defaultDrawParams } from "@/features/pattern-display/model/defaultDrawParams";
 import { useClipboard } from "@/features/pattern-export/lib/useClipboard";
 import { usePatternGenerator } from "@/features/pattern-generation/lib/usePatternGenerator";
+import { GenerationForm } from "@/features/pattern-generation";
+import type { PatternDisplayData } from "@/features/pattern-display";
 
 const initialPatternData: PatternDisplayData = {
 	width: defaultGeneratorParams.width,

@@ -12,7 +12,7 @@ type GeneratorFormProps = {
 	onGenerate: (data: GeneratorParams) => void;
 } & React.FormHTMLAttributes<HTMLFormElement>;
 
-export default function ParamGenerationForm(props: GeneratorFormProps) {
+export function ParamGenerationForm(props: GeneratorFormProps) {
 	const { onGenerate, ...formProps } = props;
 
 	const { control, handleSubmit, watch } = useForm<GeneratorParams>({

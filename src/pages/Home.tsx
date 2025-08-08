@@ -4,7 +4,7 @@ import Logo from "@/widgets/CircuitLogo";
 import { buttonVariants } from "@/shared/ui/buttonVariants";
 import { cn } from "@/shared/lib/utils";
 import { Link } from "@tanstack/react-router";
-import Carousel from "@/features/pattern-display/ui/Carousel";
+import { Carousel } from "@/features/pattern-display";
 
 export default function Home() {
 	return (

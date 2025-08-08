@@ -1,8 +1,7 @@
 import { memo, useState } from "react";
-import CodeGenerationForm from "./CodeGenerationForm";
 import type { GeneratorParams } from "@/entities/pattern/model/GeneratorParams";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import ParamGenerationForm from "./ParamGenerationForm";
+import { CodeGenerationForm, ParamGenerationForm } from "..";
 
 type GenerationFormProps = {
 	onParamGenerate: (data: GeneratorParams) => void;
@@ -10,7 +9,7 @@ type GenerationFormProps = {
 	initialCode?: string;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const GenerationForm = memo(function GenerationForm(
+export const GenerationForm = memo(function GenerationForm(
 	props: GenerationFormProps,
 ) {
 	const { onParamGenerate, onCodeGenerate, initialCode, ...divProps } = props;
@@ -36,5 +35,3 @@ const GenerationForm = memo(function GenerationForm(
 		</div>
 	);
 });
-
-export default GenerationForm;

@@ -2,18 +2,8 @@ import { SVG } from "@svgdotjs/svg.js";
 import type { Dir, Line } from "../../../entities/pattern/model/Grid";
 import { memo, useEffect, useId } from "react";
 import type { Svg, Container } from "@svgdotjs/svg.js";
-
-export type PatternDisplayData = {
-	width: number;
-	height: number;
-	lines: Line[];
-};
-
-export type DrawParams = {
-	cellSize: number;
-	strokeWidth: number;
-	stroke: { color: string; width: number; linecap: string };
-};
+import type { DrawParams } from "../model/DrawParams";
+import type { PatternDisplayData } from "../model/PatternDisplayData";
 
 type DrawLine = (
 	draw: Svg | Container,
@@ -62,7 +52,7 @@ const drawPattern: DrawPattern = (draw, drawParams, pattern) => {
 	}
 };
 
-const Pattern = memo(function Pattern({
+export const Pattern = memo(function Pattern({
 	data,
 	drawParams,
 }: {
@@ -101,5 +91,3 @@ const Pattern = memo(function Pattern({
 		/>
 	);
 });
-
-export { Pattern };

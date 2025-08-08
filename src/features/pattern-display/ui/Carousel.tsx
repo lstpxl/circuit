@@ -6,7 +6,7 @@ import {
 	useLayoutEffect,
 } from "react";
 import type { Dimensions } from "@/entities/pattern/model/Grid";
-import Slide from "@/features/pattern-display/ui/Slide";
+import Slide from "@/entities/slide/Slide";
 
 type Coords = {
 	x: number;
@@ -105,7 +105,7 @@ function updateSlidesY(
 	return result;
 }
 
-export default function Carousel() {
+export function Carousel() {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const animationRef = useRef<number | null>(null);
 	const initialPositionsSet = useRef(false);
