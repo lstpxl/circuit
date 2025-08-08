@@ -1,4 +1,4 @@
-import type { DrawParams } from "./DrawParams";
+import type { DrawParams } from "./types";
 
 export const defaultDrawParams: DrawParams = {
 	cellSize: 30,

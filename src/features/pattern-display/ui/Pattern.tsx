@@ -2,7 +2,7 @@ import { SVG } from "@svgdotjs/svg.js";
 import type { Dir, Line } from "../../../entities/pattern/model/types";
 import { memo, useEffect, useId } from "react";
 import type { Svg, Container } from "@svgdotjs/svg.js";
-import type { DrawParams } from "../model/DrawParams";
+import type { DrawParams } from "../model/types";
 import type { PatternDisplayable } from "@/entities/pattern";
 
 type DrawLine = (

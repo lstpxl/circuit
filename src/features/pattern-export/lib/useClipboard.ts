@@ -25,7 +25,3 @@ export function useClipboard() {
 
 	return { copy, status };
 }
-
-// Usage in components:
-/* const { copy, status } = useClipboard();
-const handleCopyCode = () => copy(code); */

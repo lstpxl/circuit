@@ -4,6 +4,10 @@
  * @returns Non-negative integer index (0 <= result < weights.length)
  */
 export function weightedChoice(weights: number[]): number {
+	if (weights.length === 0) {
+		throw new Error("Weights array is empty");
+	}
+
 	// Compute prefix sums
 	const prefixSums = [];
 	let total = 0;
