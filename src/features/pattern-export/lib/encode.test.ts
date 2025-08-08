@@ -1,5 +1,5 @@
-import { createGridFromCode } from "../encode";
-import { InvalidCodeError } from "../errors";
+import { createGridFromCode } from "@/features/pattern-generation/model/encode";
+import { InvalidCodeError } from "../../../entities/pattern/model/errors";
 
 describe("Pattern Encoding/Decoding", () => {
 	describe("createGridFromCode", () => {

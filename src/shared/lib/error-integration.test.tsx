@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { InvalidCodeError } from "@/model/errors";
+import { InvalidCodeError } from "@/entities/pattern/model/errors";
 import { ErrorBoundary } from "../ui/error-boundary/ErrorBoundary";
 
 // Component that throws errors for testing

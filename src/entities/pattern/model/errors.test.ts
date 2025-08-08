@@ -3,7 +3,7 @@ import {
 	GridCreationError,
 	EncodingError,
 	ValidationError,
-} from "../errors";
+} from "./errors";
 
 describe("Custom Error Classes", () => {
 	describe("InvalidCodeError", () => {

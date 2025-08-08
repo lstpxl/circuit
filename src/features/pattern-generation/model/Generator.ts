@@ -1,5 +1,5 @@
-import { weightedChoice } from "../../../model/weightedChoice";
-import type { GeneratorParams } from "../../../model/GeneratorParams";
+import { weightedChoice } from "./weightedChoice";
+import type { GeneratorParams } from "../../../entities/pattern/model/GeneratorParams";
 import type {
 	Dimensions,
 	Dir,
@@ -7,7 +7,7 @@ import type {
 	Line,
 	LineCoords,
 	VertexCoords,
-} from "../../../model/Grid";
+} from "../../../entities/pattern/model/Grid";
 
 export const getEmptyVertexGrid = (
 	gridWidth: number,

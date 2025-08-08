@@ -8,8 +8,8 @@ import {
 	InvalidCodeError,
 	GridCreationError,
 	EncodingError,
-} from "@/model/errors";
-import type { GeneratorParams } from "@/model/GeneratorParams";
+} from "@/entities/pattern/model/errors";
+import type { GeneratorParams } from "@/entities/pattern/model/GeneratorParams";
 import type { PatternDisplayData } from "@/features/pattern-display/ui/Pattern";
 
 export function usePatternGenerator(initialPattern: PatternDisplayData) {

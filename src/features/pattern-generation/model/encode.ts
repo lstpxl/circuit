@@ -3,13 +3,13 @@ import {
 	flattenedGrid,
 	getEmptyVertexGrid,
 } from "@/features/pattern-generation/model/Generator";
-import type { Dimensions, Dir, Line } from "@/model/Grid";
+import type { Dimensions, Dir, Line } from "@/entities/pattern/model/Grid";
 import {
 	GridCreationError,
 	EncodingError,
 	ValidationError,
 	InvalidCodeError,
-} from "@/model/errors";
+} from "@/entities/pattern/model/errors";
 
 export const serializeGrid = (
 	lines: Line[],

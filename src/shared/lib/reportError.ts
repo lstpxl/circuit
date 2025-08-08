@@ -3,7 +3,7 @@ import {
 	GridCreationError,
 	EncodingError,
 	ValidationError,
-} from "@/model/errors";
+} from "@/entities/pattern/model/errors";
 
 export function reportError(error: Error, context?: Record<string, unknown>) {
 	const baseContext: Record<string, unknown> = {

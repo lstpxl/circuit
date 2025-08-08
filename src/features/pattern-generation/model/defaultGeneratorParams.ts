@@ -1,4 +1,4 @@
-import type { GeneratorParams } from "./GeneratorParams";
+import type { GeneratorParams } from "../../../entities/pattern/model/GeneratorParams";
 
 export const defaultGeneratorParams: GeneratorParams = {
 	width: 7,

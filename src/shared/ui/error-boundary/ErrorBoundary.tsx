@@ -1,5 +1,8 @@
 import React from "react";
-import { InvalidCodeError, GridCreationError } from "@/model/errors";
+import {
+	InvalidCodeError,
+	GridCreationError,
+} from "@/entities/pattern/model/errors";
 import DefaultErrorFallback from "./DefaultErrorFallback";
 
 interface ErrorBoundaryState {

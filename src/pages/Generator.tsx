@@ -3,7 +3,7 @@ import { createGrid } from "../features/pattern-generation/model/Generator";
 import GenerationForm from "@/features/pattern-generation/ui/GenerationForm";
 import type { PatternDisplayData } from "../features/pattern-display/ui/Pattern";
 import { Pattern } from "../features/pattern-display/ui/Pattern";
-import { defaultGeneratorParams } from "@/model/defaultGeneratorParams.ts";
+import { defaultGeneratorParams } from "@/features/pattern-generation/model/defaultGeneratorParams";
 import AuthorCredits from "@/widgets/AuthorCredits";
 import Logo from "@/widgets/CircuitLogo";
 import LinkToHome from "@/widgets/LinkToHomePage";

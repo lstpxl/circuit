@@ -5,7 +5,7 @@ import {
 	InvalidCodeError,
 	GridCreationError,
 	EncodingError,
-} from "@/model/errors";
+} from "@/entities/pattern/model/errors";
 
 // Mock the encode module
 jest.mock("@/model/encode");

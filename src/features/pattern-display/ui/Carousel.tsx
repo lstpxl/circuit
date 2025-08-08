@@ -5,7 +5,7 @@ import {
 	useCallback,
 	useLayoutEffect,
 } from "react";
-import type { Dimensions } from "@/model/Grid";
+import type { Dimensions } from "@/entities/pattern/model/Grid";
 import Slide from "@/features/pattern-display/ui/Slide";
 
 type Coords = {

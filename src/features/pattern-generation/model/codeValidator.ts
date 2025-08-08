@@ -1,6 +1,6 @@
 import { bareBin2base64 } from "./encode";
-import { ValidationError } from "../../../model/errors";
-import type { Dimensions } from "../../../model/Grid";
+import { ValidationError } from "../../../entities/pattern/model/errors";
+import type { Dimensions } from "../../../entities/pattern/model/Grid";
 
 type CodeParseResult = {
 	width: number;

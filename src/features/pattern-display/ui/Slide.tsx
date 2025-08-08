@@ -1,7 +1,7 @@
 import { useRef, useState, useMemo } from "react";
 import { Pattern, type PatternDisplayData } from "./Pattern";
 import { createGrid } from "@/features/pattern-generation/model/Generator";
-import type { WindDirection } from "@/model/GeneratorParams";
+import type { WindDirection } from "@/entities/pattern/model/GeneratorParams";
 import { defaultDrawParams } from "@/features/pattern-display/model/defaultDrawParams";
 
 type SlideProps = {
