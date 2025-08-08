@@ -1,9 +1,9 @@
+import { APP_CONFIG } from "@/shared/config/constants";
 import SmallIconButton from "@/shared/ui/SmallIconButton";
 
 export function DownloadSVGButton({
-	code,
 	frameId,
-}: { code: string; frameId: React.RefObject<HTMLDivElement | null> }) {
+}: { frameId: React.RefObject<HTMLDivElement | null> }) {
 	const handleDownloadSVG = () => {
 		if (!frameId.current) return;
 		const frame = frameId.current;
@@ -16,8 +16,9 @@ export function DownloadSVGButton({
 			const svgUrl = URL.createObjectURL(svgBlob);
 			const downloadLink = document.createElement("a");
 			downloadLink.href = svgUrl;
-			const hash = code.slice(0, 12);
-			downloadLink.download = `circuit-pattern-${hash}.svg`;
+			// const hash = code.slice(0, 12);
+			const filename = `${APP_CONFIG.defaultFilename}${Date.now()}.svg`;
+			downloadLink.download = filename;
 			document.body.appendChild(downloadLink);
 			downloadLink.click();
 			document.body.removeChild(downloadLink);

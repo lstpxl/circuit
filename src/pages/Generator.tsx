@@ -47,8 +47,9 @@ function Generator({ code: urlCode }: { code?: string }) {
 							<div className="absolute bottom-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
 								<CopyCodeButton code={code} />
 								<CopyLinkButton code={code} />
-								<DownloadSVGButton code={code} frameId={frameId} />
+								<DownloadSVGButton frameId={frameId} />
 							</div>
+							``
 						</>
 					)}
 				</div>
