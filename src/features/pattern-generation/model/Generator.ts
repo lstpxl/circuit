@@ -1,6 +1,9 @@
 import { weightedChoice } from "./weightedChoice";
-import type { GeneratorParams } from "./GeneratorParams.d";
-import { WindDirection } from "./WindDirection.d";
+import {
+	WIND_DIRECTIONS,
+	type GeneratorParams,
+	type WindDirection,
+} from "./types";
 import type {
 	Dimensions,
 	Dir,
@@ -8,7 +11,7 @@ import type {
 	Line,
 	LineCoords,
 	VertexCoords,
-} from "../../../entities/pattern/model/Grid";
+} from "../../../entities/pattern/model/types";
 import type { PatternDisplayable } from "@/entities/pattern";
 
 export const getEmptyVertexGrid = (
@@ -180,7 +183,7 @@ export const createGrid = (generatorParams: GeneratorParams): Line[] => {
 };
 
 export const getRandomWindDirection = (): WindDirection => {
-	const values = Object.values(WindDirection);
+	const values = Object.values(WIND_DIRECTIONS);
 	return values[Math.floor(Math.random() * values.length)];
 };
 

@@ -1,8 +1,7 @@
-export type * from "./model/Grid";
+export type * from "./model/types";
 export {
 	InvalidCodeError,
 	GridCreationError,
 	EncodingError,
 	ValidationError,
 } from "./model/errors";
-export type { PatternDisplayable } from "./model/PatternDisplayable";

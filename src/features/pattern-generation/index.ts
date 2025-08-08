@@ -1,8 +1,8 @@
 export { usePatternGenerator } from "./lib/usePatternGenerator";
 export { GenerationForm } from "./ui/GenerationForm";
-export { ParamGenerationForm } from "./ui/ParamGenerationForm";
-export { CodeGenerationForm } from "./ui/CodeGenerationForm";
+export { ParamForm } from "./ui/ParamForm";
+export { CodeForm } from "./ui/CodeForm";
 export { getRandomWindDirection } from "./model/Generator";
 export { createGrid, createPatternDisplayable } from "./model/Generator";
-export type { GeneratorParams } from "./model/GeneratorParams";
-export { WindDirection } from "./model/WindDirection.d";
+export type { GeneratorParams, WindDirection } from "./model/types";
+export { WIND_DIRECTIONS } from "./model/types";

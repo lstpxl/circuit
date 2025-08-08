@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
-import type { GeneratorParams } from "@/features/pattern-generation/model/GeneratorParams";
+import type { GeneratorParams } from "@/features/pattern-generation/model/types";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { CodeGenerationForm, ParamGenerationForm } from "..";
+import { CodeForm, ParamForm } from "..";
 
 type GenerationFormProps = {
 	onParamGenerate: (data: GeneratorParams) => void;
@@ -24,13 +24,10 @@ export const GenerationForm = memo(function GenerationForm(
 				</TabsList>
 			</Tabs>
 			<div className={activeTab === "params" ? "block" : "hidden"}>
-				<ParamGenerationForm onGenerate={onParamGenerate} />
+				<ParamForm onGenerate={onParamGenerate} />
 			</div>
 			<div className={activeTab === "code" ? "block" : "hidden"}>
-				<CodeGenerationForm
-					onGenerate={onCodeGenerate}
-					initialCode={initialCode}
-				/>
+				<CodeForm onGenerate={onCodeGenerate} initialCode={initialCode} />
 			</div>
 		</div>
 	);

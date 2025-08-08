@@ -8,7 +8,7 @@ import {
 } from "@/entities/pattern/model/errors";
 
 // Mock the encode module
-jest.mock("@/model/encode");
+jest.mock("@/features/pattern-export/lib/encode");
 const mockCreateGridFromCode = jest.mocked(encode.createGridFromCode);
 
 // Mock console.error to suppress expected error logs

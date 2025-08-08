@@ -6,6 +6,7 @@ import {
 } from "./codeValidator";
 import { ValidationError } from "../../../entities/pattern/model/errors";
 import { pattern2code } from "@/features/pattern-export/lib/encode";
+import { WIND_DIRECTIONS } from "@/features/pattern-generation";
 
 describe("Code Validation", () => {
 	// Generate a real valid code for testing
@@ -17,7 +18,7 @@ describe("Code Validation", () => {
 			width: 5,
 			height: 5,
 			density: 20,
-			direction: "none",
+			direction: WIND_DIRECTIONS.None,
 			strength: 0,
 			cohesion: 0,
 		});

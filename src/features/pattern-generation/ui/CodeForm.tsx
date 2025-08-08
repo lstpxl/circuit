@@ -14,7 +14,7 @@ type CodeFormProps = {
 	initialCode?: string;
 } & React.FormHTMLAttributes<HTMLFormElement>;
 
-export function CodeGenerationForm(props: CodeFormProps) {
+export function CodeForm(props: CodeFormProps) {
 	const { onGenerate, initialCode, ...formProps } = props;
 
 	const { control, handleSubmit, watch } = useForm<CodeFormData>({

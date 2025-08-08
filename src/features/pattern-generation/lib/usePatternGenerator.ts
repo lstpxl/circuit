@@ -9,7 +9,7 @@ import {
 	GridCreationError,
 	EncodingError,
 } from "@/entities/pattern/model/errors";
-import type { GeneratorParams } from "@/features/pattern-generation/model/GeneratorParams";
+import type { GeneratorParams } from "@/features/pattern-generation/model/types";
 import type { PatternDisplayable } from "@/entities/pattern";
 
 export function usePatternGenerator(initialPattern: PatternDisplayable) {

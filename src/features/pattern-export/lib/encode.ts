@@ -3,7 +3,7 @@ import {
 	flattenedGrid,
 	getEmptyVertexGrid,
 } from "@/features/pattern-generation/model/Generator";
-import type { Dimensions, Dir, Line } from "@/entities/pattern/model/Grid";
+import type { Dimensions, Dir, Line } from "@/entities/pattern/model/types";
 import {
 	GridCreationError,
 	EncodingError,
