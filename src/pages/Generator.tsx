@@ -49,7 +49,6 @@ function Generator({ code: urlCode }: { code?: string }) {
 								<CopyLinkButton code={code} />
 								<DownloadSVGButton frameId={frameId} />
 							</div>
-							``
 						</>
 					)}
 				</div>
