@@ -1,2 +1,2 @@
-export { CircuitLogo } from "./CircuitLogo.tsx";
-export { GithubLogo } from "./GithubLogo.tsx";
+export { CircuitLogo } from "./CircuitLogo";
+export { GithubLogo } from "./GithubLogo";
