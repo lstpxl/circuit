@@ -46,6 +46,10 @@ export const flattenedGrid = (grid: Grid): Line[] => {
 	return result;
 };
 
+export const filterUnsetLines = (lines: Line[]): Line[] => {
+	return lines.filter((line) => line.status);
+};
+
 const getSecondVertexCoords = (line: LineCoords): VertexCoords => {
 	if (line.dir === "r") {
 		return { x: line.x + 1, y: line.y };

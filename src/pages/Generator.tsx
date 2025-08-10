@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
-import { createPatternDisplayable } from "../features/pattern-generation/model/Generator";
 import { Pattern } from "../features/pattern-display/ui/Pattern";
-import { defaultGeneratorParams } from "@/features/pattern-generation/model/defaultGeneratorParams";
 import { AuthorCredits } from "@/widgets/AuthorCredits";
 import LinkToHome from "@/shared/ui/LinkToHomePage";
 import { defaultDrawParams } from "@/features/pattern-display/model/defaultDrawParams";
@@ -14,8 +12,6 @@ import {
 	DownloadSVGButton,
 } from "@/features/pattern-export";
 
-const patternFactory = createPatternDisplayable(defaultGeneratorParams);
-
 function Generator({ code: urlCode }: { code?: string }) {
 	const frameId = useRef<HTMLDivElement>(null);
 	const {
@@ -24,7 +20,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 		validationError,
 		generateFromParams,
 		generateFromCode,
-	} = usePatternGenerator(patternFactory);
+	} = usePatternGenerator();
 
 	useEffect(() => {
 		if (urlCode) {
@@ -37,6 +33,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 			<div className="flex flex-col items-center gap-4">
 				<div
 					id="frame"
+					data-testid="frame"
 					ref={frameId}
 					className="relative border border-neutral-300 dark:border-neutral-700 rounded-lg p-[30px] group bg-neutral-800"
 				>

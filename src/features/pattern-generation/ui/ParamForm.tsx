@@ -27,7 +27,11 @@ export function ParamForm(props: ParamFormProps) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} {...formProps}>
+		<form
+			data-testid="param-form"
+			onSubmit={handleSubmit(onSubmit)}
+			{...formProps}
+		>
 			<Card className="flex flex-col items-center rounded-lg shadow-lg p-6 bg-neutral-500 dark:bg-neutral-800 gap-2">
 				{/* Width */}
 				<div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center w-full max-w-lg">

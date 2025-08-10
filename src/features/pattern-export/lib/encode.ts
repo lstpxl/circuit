@@ -1,5 +1,6 @@
 import { validateCodeStrict } from "./codeValidator";
 import {
+	filterUnsetLines,
 	flattenedGrid,
 	getEmptyVertexGrid,
 } from "@/features/pattern-generation/model/Generator";
@@ -19,22 +20,26 @@ export const serializeGrid = (
 	for (let y = 0; y < dimensions.height; y++) {
 		for (let x = 0; x < dimensions.width; x++) {
 			for (const dir of ["r", "d", "a", "e"]) {
-				const line = lines.find((l) => l.x === x && l.y === y && l.dir === dir);
+				const line = lines.find(
+					(l) => l.x === x && l.y === y && l.dir === dir && l.status,
+				);
 				parts.push(line ? "1" : "0");
 			}
 		}
 		const line = lines.find(
-			(l) => l.x === dimensions.width && l.y === y && l.dir === "d",
+			(l) => l.x === dimensions.width && l.y === y && l.dir === "d" && l.status,
 		);
 		parts.push(line ? "1" : "0");
 	}
 	for (let x = 0; x < dimensions.width; x++) {
 		const line1 = lines.find(
-			(l) => l.x === x && l.y === dimensions.height && l.dir === "a",
+			(l) =>
+				l.x === x && l.y === dimensions.height && l.dir === "a" && l.status,
 		);
 		parts.push(line1 ? "1" : "0");
 		const line = lines.find(
-			(l) => l.x === x && l.y === dimensions.height && l.dir === "r",
+			(l) =>
+				l.x === x && l.y === dimensions.height && l.dir === "r" && l.status,
 		);
 		parts.push(line ? "1" : "0");
 	}
@@ -56,7 +61,22 @@ export const bareBin2base64 = (str: string): string => {
 	return btoa(base64).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 };
 
+export const getBinaryLength = (dimensions: Dimensions) => {
+	return (
+		4 * dimensions.width * dimensions.height +
+		2 * dimensions.width +
+		dimensions.height
+	);
+};
+
 export const bin2base64 = (str: string, dimensions: Dimensions): string => {
+	const expectedLength = getBinaryLength(dimensions);
+	if (str.length !== expectedLength) {
+		throw new EncodingError(
+			`Binary string length mismatch. Expected ${expectedLength}, got ${str.length}`,
+			"serialize",
+		);
+	}
 	const bin = str.match(/.{1,8}/g);
 	if (!bin) return "";
 	const base64 = bin
@@ -92,10 +112,7 @@ export const createGridFromCode = (code: string): CreateGridResult => {
 		};
 
 		// Validate binary string length
-		const expectedLength =
-			4 * dimensions.width * dimensions.height +
-			2 * dimensions.width +
-			dimensions.height;
+		const expectedLength = getBinaryLength(dimensions);
 		// const expectedBase64Length = Math.ceil(expectedLength / 6) * 6;
 		if (
 			parsed.binary.length < expectedLength ||
@@ -153,7 +170,8 @@ export const createGridFromCode = (code: string): CreateGridResult => {
 		}
 
 		// Convert the grid to a flat array of lines
-		const flat = flattenedGrid(empty);
+		// and filter out unset lines
+		const flat = filterUnsetLines(flattenedGrid(empty));
 		return {
 			lines: flat,
 			dimensions,

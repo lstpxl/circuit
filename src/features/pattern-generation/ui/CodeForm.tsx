@@ -4,6 +4,7 @@ import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
 import { Card } from "@/shared/ui/card";
 import { validateCode } from "@/features/pattern-export/lib/codeValidator";
+import { useCallback } from "react";
 
 type CodeFormData = {
 	code: string;
@@ -24,14 +25,22 @@ export function CodeForm(props: CodeFormProps) {
 	});
 
 	const code = watch("code");
-	const codeIsValid = validateCode(code);
+	const codeIsValid = useCallback(() => validateCode(code), [code]);
 
 	const onSubmit = (data: CodeFormData) => {
+		if (!codeIsValid()) {
+			// console.warn("Invalid code submitted:", data.code);
+			return;
+		}
 		onGenerate(data.code);
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} {...formProps}>
+		<form
+			data-testid="code-form"
+			onSubmit={handleSubmit(onSubmit)}
+			{...formProps}
+		>
 			<Card className="flex flex-col items-center rounded-lg shadow-lg p-6 bg-neutral-500 dark:bg-neutral-800 gap-4 min-w-[468px]">
 				<div className="grid grid-cols-1 gap-4 w-full">
 					<Label htmlFor="code_input" className="text-left">
@@ -63,7 +72,7 @@ export function CodeForm(props: CodeFormProps) {
 
 				<Button
 					type="submit"
-					disabled={!codeIsValid}
+					disabled={!codeIsValid()}
 					className="mt-2 cursor-pointer text-white hover:border-primary hover:border-2 transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed"
 				>
 					Generate

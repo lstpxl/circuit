@@ -1,5 +1,8 @@
 import { useState, useCallback } from "react";
-import { createGrid } from "@/features/pattern-generation/model/Generator";
+import {
+	createGrid,
+	createPatternDisplayable,
+} from "@/features/pattern-generation/model/Generator";
 import {
 	createGridFromCode,
 	pattern2code,
@@ -11,8 +14,11 @@ import {
 } from "@/entities/pattern/model/errors";
 import type { GeneratorParams } from "@/features/pattern-generation/model/types";
 import type { PatternDisplayable } from "@/entities/pattern";
+import { defaultGeneratorParams } from "../model/defaultGeneratorParams";
 
-export function usePatternGenerator(initialPattern: PatternDisplayable) {
+const initialPattern = createPatternDisplayable(defaultGeneratorParams);
+
+export function usePatternGenerator() {
 	const [patternData, setPatternData] =
 		useState<PatternDisplayable>(initialPattern);
 	const [code, setCode] = useState<string>(

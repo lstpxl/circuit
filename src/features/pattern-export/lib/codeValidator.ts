@@ -1,4 +1,4 @@
-import { bareBin2base64 } from "./encode";
+import { bareBin2base64, getBinaryLength } from "./encode";
 import { ValidationError } from "../../../entities/pattern/model/errors";
 import type { Dimensions } from "../../../entities/pattern/model/types";
 
@@ -20,7 +20,7 @@ export function validateCode(code: string): CodeParseResult | false {
 	const height = Number.parseInt(heightStr);
 	if (Number.isNaN(height) || height <= 0) return false;
 	if (height > 25 || height < 1) return false;
-	const expectedLength = 4 * width * height + 2 * width + height;
+	const expectedLength = getBinaryLength({ width, height });
 
 	const zeroString = "0".repeat(expectedLength);
 	const encoded = bareBin2base64(zeroString);
@@ -128,7 +128,7 @@ export function validateCodeStrict(code: string): CodeParseResult {
 		);
 	}
 
-	const expectedLength = 4 * width * height + 2 * width + height;
+	const expectedLength = getBinaryLength({ width, height });
 
 	const zeroString = "0".repeat(expectedLength);
 	const encoded = bareBin2base64(zeroString);

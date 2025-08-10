@@ -5,11 +5,10 @@ type PublicEnv = {
 	PROD?: boolean;
 };
 
-// Safe dynamic access that avoids a literal `import.meta` in parsed code
-function getImportMeta(): unknown | undefined {
+// Avoid literal import.meta in CJS parsing (tests)
+function getImportMeta(): unknown {
 	try {
-		// Using Function to avoid parse-time syntax error in CJS
-		// sd eslint-disable-next-line no-new-func
+		// eslint-disable-next-line no-new-func
 		return Function("return import.meta")();
 	} catch {
 		return undefined;
@@ -19,27 +18,33 @@ function getImportMeta(): unknown | undefined {
 const meta = getImportMeta();
 const raw = (meta as { env?: Record<string, unknown> })?.env ?? {};
 
+// Safe snapshot of process.env (undefined in browser/Vite)
+const procEnv: Record<string, unknown> =
+	typeof process !== "undefined" && process?.env
+		? (process.env as Record<string, unknown>)
+		: {};
+
 export const ENV: PublicEnv = {
 	VITE_BASE_URL:
 		typeof raw.VITE_BASE_URL === "string"
-			? raw.VITE_BASE_URL
-			: typeof process.env.VITE_BASE_URL === "string"
-				? process.env.VITE_BASE_URL
+			? (raw.VITE_BASE_URL as string)
+			: typeof procEnv.VITE_BASE_URL === "string"
+				? (procEnv.VITE_BASE_URL as string)
 				: "/",
 	NODE_ENV:
 		typeof raw.NODE_ENV === "string"
-			? raw.NODE_ENV
-			: typeof process.env.NODE_ENV === "string"
-				? process.env.NODE_ENV
+			? (raw.NODE_ENV as string)
+			: typeof procEnv.NODE_ENV === "string"
+				? (procEnv.NODE_ENV as string)
 				: "test",
 	DEV:
 		typeof raw.DEV === "boolean"
-			? raw.DEV
-			: process.env.NODE_ENV !== "production",
+			? (raw.DEV as boolean)
+			: procEnv.NODE_ENV !== "production",
 	PROD:
 		typeof raw.PROD === "boolean"
-			? raw.PROD
-			: process.env.NODE_ENV === "production",
+			? (raw.PROD as boolean)
+			: procEnv.NODE_ENV === "production",
 };
 
 export const getBaseUrl = () =>

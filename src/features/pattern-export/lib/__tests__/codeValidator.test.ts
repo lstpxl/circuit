@@ -1,10 +1,10 @@
-import { createGrid } from "../../pattern-generation/model/Generator";
+import { createGrid } from "../../../pattern-generation/model/Generator";
 import {
 	validateCode,
 	validateCodeStrict,
 	getDimensionsFromCode,
-} from "./codeValidator";
-import { ValidationError } from "../../../entities/pattern/model/errors";
+} from "../codeValidator";
+import { ValidationError } from "../../../../entities/pattern/model/errors";
 import { pattern2code } from "@/features/pattern-export/lib/encode";
 import { WIND_DIRECTIONS } from "@/features/pattern-generation";
 

@@ -34,12 +34,13 @@ export function Slide(props: SlideProps) {
 
 	return (
 		<div
+			data-testid="slide"
 			data-index={index}
 			className="bg-neutral-800 flex items-center justify-center text-white text-xl font-bold flex-shrink-0"
 			style={{ width: `${width + 60}px`, height: `${height + 60}px`, ...style }}
 		>
 			<div
-				id="frame"
+				id={`frame-${index}`}
 				className="relative border border-neutral-700 dark:border-neutral-700 rounded-lg p-[30px] group"
 			>
 				{memoizedPattern}

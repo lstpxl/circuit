@@ -1,6 +1,11 @@
+import { TextEncoder, TextDecoder } from "node:util";
+global.TextEncoder = TextEncoder as typeof globalThis.TextEncoder;
+global.TextDecoder = TextDecoder as typeof globalThis.TextDecoder;
+
 import "@testing-library/jest-dom";
 import "whatwg-fetch";
 import { ENV } from "@/shared/config/env";
+import RO from "resize-observer-polyfill";
 
 // Expose for debug (narrowed)
 declare global {
@@ -51,3 +56,20 @@ Object.defineProperty(navigator, "userAgent", {
 	value: "jest-test-runner",
 	writable: true,
 });
+
+if (typeof window !== "undefined" && !("ResizeObserver" in window)) {
+	class ResizeObserver {
+		observe() {}
+		unobserve() {}
+		disconnect() {}
+	}
+	// @ts-expect-error: sdfsdfsd
+	window.ResizeObserver = ResizeObserver;
+	global.ResizeObserver = ResizeObserver;
+}
+
+if (!("ResizeObserver" in window)) {
+	// @ts-expect-error: sdfsdfsd
+	window.ResizeObserver = RO;
+	global.ResizeObserver = RO;
+}
