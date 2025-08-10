@@ -1,5 +1,6 @@
 import SmallIconButton from "@/shared/ui/SmallIconButton";
 import { useClipboard } from "..";
+import { getBaseUrl } from "@/shared/config/env";
 
 export function CopyLinkButton({ code }: { code: string }) {
 	const { copy } = useClipboard();
@@ -7,7 +8,7 @@ export function CopyLinkButton({ code }: { code: string }) {
 	const handleCopyLink = async () => {
 		try {
 			const currentUrl = new URL(window.location.href);
-			const baseUrl = import.meta.env.VITE_BASE_URL || "/";
+			const baseUrl = getBaseUrl();
 			const generatePath = baseUrl.endsWith("/")
 				? `${baseUrl}generate`
 				: `${baseUrl}/generate`;

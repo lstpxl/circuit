@@ -22,18 +22,28 @@ export default tseslint.config([
     rules: {
       ...reactHooks.configs.recommended.rules,
       ...reactRefresh.configs.vite.rules,
-      // FSD import rules
+    },
+  },
+  // FSD import rules for lower layers only
+  {
+    files: [
+      "src/widgets/**/*.{ts,tsx}",
+      "src/features/**/*.{ts,tsx}",
+      "src/entities/**/*.{ts,tsx}",
+      "src/shared/**/*.{ts,tsx}",
+    ],
+    rules: {
       "no-restricted-imports": [
         "error",
         {
           patterns: [
             {
-              group: ["@/app/*"],
-              message: "App layer should not be imported in other layers",
-            },
-            {
               group: ["@/pages/*"],
               message: "Pages should not be imported in lower layers",
+            },
+            {
+              group: ["@/app/*"],
+              message: "App layer should not be imported in other layers",
             },
           ],
         },

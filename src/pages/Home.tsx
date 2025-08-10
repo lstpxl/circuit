@@ -12,7 +12,7 @@ export default function Home() {
 			<Carousel />
 			<Link
 				to="/generate"
-				search={{ code: undefined }}
+				search={{ code: undefined } as { code: string | undefined }}
 				className={cn(
 					buttonVariants({ variant: "default", size: "xl" }),
 					"[&.active]:font-bold",
