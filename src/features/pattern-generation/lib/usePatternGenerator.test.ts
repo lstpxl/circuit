@@ -15,12 +15,6 @@ const mockCreateGridFromCode = jest.mocked(encode.createGridFromCode);
 const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
 describe("usePatternGenerator", () => {
-	const mockInitialPattern = {
-		width: 3,
-		height: 3,
-		lines: [],
-	};
-
 	beforeEach(() => {
 		jest.clearAllMocks();
 		consoleSpy.mockClear();
@@ -31,9 +25,7 @@ describe("usePatternGenerator", () => {
 	});
 
 	it("should handle code generation errors gracefully", () => {
-		const { result } = renderHook(() =>
-			usePatternGenerator(mockInitialPattern),
-		);
+		const { result } = renderHook(() => usePatternGenerator());
 
 		mockCreateGridFromCode.mockImplementation(() => {
 			throw new InvalidCodeError("Invalid code", "bad-code");
@@ -47,9 +39,7 @@ describe("usePatternGenerator", () => {
 	});
 
 	it("should clear validation error on successful generation", () => {
-		const { result } = renderHook(() =>
-			usePatternGenerator(mockInitialPattern),
-		);
+		const { result } = renderHook(() => usePatternGenerator());
 
 		mockCreateGridFromCode.mockReturnValue({
 			lines: [],
@@ -64,9 +54,7 @@ describe("usePatternGenerator", () => {
 	});
 
 	it("should handle grid creation errors", () => {
-		const { result } = renderHook(() =>
-			usePatternGenerator(mockInitialPattern),
-		);
+		const { result } = renderHook(() => usePatternGenerator());
 
 		mockCreateGridFromCode.mockImplementation(() => {
 			throw new GridCreationError("Grid creation failed", "test-code");
@@ -82,9 +70,7 @@ describe("usePatternGenerator", () => {
 	});
 
 	it("should handle encoding errors", () => {
-		const { result } = renderHook(() =>
-			usePatternGenerator(mockInitialPattern),
-		);
+		const { result } = renderHook(() => usePatternGenerator());
 
 		mockCreateGridFromCode.mockImplementation(() => {
 			throw new EncodingError("Encoding failed", "deserialize");
@@ -100,9 +86,7 @@ describe("usePatternGenerator", () => {
 	});
 
 	it("should handle unknown errors", () => {
-		const { result } = renderHook(() =>
-			usePatternGenerator(mockInitialPattern),
-		);
+		const { result } = renderHook(() => usePatternGenerator());
 
 		mockCreateGridFromCode.mockImplementation(() => {
 			throw new Error("Unknown error");
