@@ -14,6 +14,8 @@ import {
 	DownloadSVGButton,
 } from "@/features/pattern-export";
 
+const patternFactory = createPatternDisplayable(defaultGeneratorParams);
+
 function Generator({ code: urlCode }: { code?: string }) {
 	const frameId = useRef<HTMLDivElement>(null);
 	const {
@@ -22,7 +24,7 @@ function Generator({ code: urlCode }: { code?: string }) {
 		validationError,
 		generateFromParams,
 		generateFromCode,
-	} = usePatternGenerator(createPatternDisplayable(defaultGeneratorParams));
+	} = usePatternGenerator(patternFactory);
 
 	useEffect(() => {
 		if (urlCode) {
