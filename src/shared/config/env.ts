@@ -52,9 +52,9 @@ export const ENV: PublicEnv = {
 export const getBaseUrl = (): string => {
 	// First check if we have the Vite-injected base URL
 	if (typeof __APP_BASE_URL__ === "string") {
-		return __APP_BASE_URL__.replace(/\/+$/, "") || "/";
+		return __APP_BASE_URL__ || "/";
 	}
 
 	// Fall back to environment variable from ENV
-	return (ENV.VITE_BASE_URL || "/").replace(/\/+$/, "") || "/";
+	return ENV.VITE_BASE_URL || "/";
 };
