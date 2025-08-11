@@ -4,7 +4,7 @@ global.TextDecoder = TextDecoder as typeof globalThis.TextDecoder;
 
 import "@testing-library/jest-dom";
 import "whatwg-fetch";
-import { ENV } from "@/shared/config/env";
+import { getBaseUrl, ENV } from "./src/shared/config/env";
 import RO from "resize-observer-polyfill";
 
 // Expose for debug (narrowed)
@@ -20,8 +20,7 @@ declare global {
 }
 globalThis.__APP_ENV__ = ENV;
 
-process.env.VITE_BASE_URL =
-	process.env.VITE_BASE_URL || ENV.VITE_BASE_URL || "/";
+process.env.VITE_BASE_URL = process.env.VITE_BASE_URL || getBaseUrl() || "/";
 
 // Typed bridge of window APIs onto globalThis
 type FetchGlobals = {

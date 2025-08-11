@@ -8,12 +8,14 @@ type PublicEnv = {
 // Avoid literal import.meta in CJS parsing (tests)
 function getImportMeta(): unknown {
 	try {
-		// eslint-disable-next-line no-new-func
 		return Function("return import.meta")();
 	} catch {
 		return undefined;
 	}
 }
+
+// Try to access the base URL injected by Vite
+declare const __APP_BASE_URL__: string | undefined;
 
 const meta = getImportMeta();
 const raw = (meta as { env?: Record<string, unknown> })?.env ?? {};
@@ -47,5 +49,12 @@ export const ENV: PublicEnv = {
 			: procEnv.NODE_ENV === "production",
 };
 
-export const getBaseUrl = () =>
-	(ENV.VITE_BASE_URL || "/").replace(/\/+$/, "") || "/";
+export const getBaseUrl = (): string => {
+	// First check if we have the Vite-injected base URL
+	if (typeof __APP_BASE_URL__ === "string") {
+		return __APP_BASE_URL__.replace(/\/+$/, "") || "/";
+	}
+
+	// Fall back to environment variable from ENV
+	return (ENV.VITE_BASE_URL || "/").replace(/\/+$/, "") || "/";
+};
