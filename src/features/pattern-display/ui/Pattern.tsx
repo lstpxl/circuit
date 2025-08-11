@@ -82,6 +82,7 @@ export const Pattern = memo(function Pattern({
 	return (
 		<div
 			id={`pattern-${containerId}`}
+			data-testid={`pattern-${containerId}`}
 			style={{
 				width: data.width * drawParams.cellSize + drawParams.strokeWidth,
 				height: data.height * drawParams.cellSize + drawParams.strokeWidth,

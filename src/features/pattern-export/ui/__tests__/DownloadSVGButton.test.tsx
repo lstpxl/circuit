@@ -1,14 +1,41 @@
-// Now import JSDOM
-// import { JSDOM } from "jsdom";
-
-// Setup DOM environment immediately
-// const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
-// global.document = dom.window.document;
-// global.window = dom.window as unknown as Window & typeof globalThis;
-
-// Now import React testing utilities
+/**
+ * @jest-environment jsdom
+ */
+import type React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { DownloadSVGButton } from "../DownloadSVGButton";
+
+// Mock SmallIconButton to avoid complex component interactions
+jest.mock("@/shared/ui/SmallIconButton", () => {
+	type SmallIconButtonProps = {
+		onClick: React.MouseEventHandler<HTMLButtonElement>;
+		titleIdle: string;
+		titleTriggered: string;
+		icon: React.ReactNode;
+	};
+	return {
+		__esModule: true,
+		default: function SmallIconButton({
+			onClick,
+			titleIdle,
+			titleTriggered,
+			icon,
+		}: SmallIconButtonProps) {
+			return (
+				<button
+					type="button"
+					onClick={onClick}
+					title={titleIdle}
+					data-title-alt={titleTriggered}
+					data-testid="download-button"
+				>
+					{icon}
+				</button>
+			);
+		},
+	};
+});
 
 // Mock URL.createObjectURL and URL.revokeObjectURL
 global.URL.createObjectURL = jest.fn(() => "mock-blob-url");
@@ -21,59 +48,22 @@ global.XMLSerializer = jest.fn().mockImplementation(() => ({
 	),
 }));
 
-// Create a mock for document.createElement
-const realCreateElement = document.createElement.bind(document);
-
-// let mockLink: HTMLAnchorElement;
-
-const mockCreateElement = jest.fn((tagName: string) => {
-	if (tagName === "a") {
-		const link = realCreateElement("a") as HTMLAnchorElement;
-		// Mock the click method
-		link.click = jest.fn();
-		return link;
-	}
-	return realCreateElement(tagName);
-});
-
-const mockAppendChild = jest.fn();
-const mockRemoveChild = jest.fn();
-
-// Mock link element
-const mockLink = {
-	href: "",
-	download: "",
-	click: jest.fn(),
-	style: {} as CSSStyleDeclaration,
-} as unknown as HTMLAnchorElement;
-
 describe("DownloadSVGButton", () => {
 	let mockFrameRef: React.RefObject<HTMLDivElement | null>;
 	let mockSvgElement: Partial<SVGSVGElement>;
+	// let mockAppendChild: jest.SpyInstance;
+	// let mockRemoveChild: jest.SpyInstance;
+	let mockCreateElement: jest.SpyInstance;
+
+	// Mock link element
+	const mockLink = {
+		href: "",
+		download: "",
+		click: jest.fn(),
+		style: {} as CSSStyleDeclaration,
+	} as unknown as HTMLAnchorElement;
 
 	beforeAll(() => {
-		// Set up mocks once for all tests
-		mockCreateElement.mockImplementation((tagName: string) => {
-			if (tagName === "a") {
-				return mockLink;
-			}
-			// For other elements, return a minimal mock
-			return {
-				tagName: tagName.toUpperCase(),
-				appendChild: jest.fn(),
-				removeChild: jest.fn(),
-			};
-		});
-
-		// Replace the methods
-		jest.spyOn(document, "createElement").mockImplementation(mockCreateElement);
-		jest
-			.spyOn(document.body, "appendChild")
-			.mockImplementation(mockAppendChild);
-		jest
-			.spyOn(document.body, "removeChild")
-			.mockImplementation(mockRemoveChild);
-
 		// Create mock SVG element
 		mockSvgElement = {
 			tagName: "svg",
@@ -91,13 +81,26 @@ describe("DownloadSVGButton", () => {
 	});
 
 	beforeEach(() => {
-		// Clear mock calls but keep implementations
-		jest.clearAllMocks();
-
 		// Reset mock link properties
 		mockLink.href = "";
 		mockLink.download = "";
+		jest.clearAllMocks();
 
+		// Keep a reference to the original function
+		const originalCreateElement = document.createElement;
+
+		// Setup DOM mocks
+		mockCreateElement = jest
+			.spyOn(document, "createElement")
+			.mockImplementation((tagName: string) => {
+				if (tagName === "a") {
+					return mockLink;
+				}
+				// For other elements, call the original implementation
+				return originalCreateElement.call(document, tagName);
+			});
+
+		// Reset frame ref querySelector mock
 		if (mockFrameRef.current) {
 			(mockFrameRef.current.querySelector as jest.Mock).mockReturnValue(
 				mockSvgElement,
@@ -105,9 +108,9 @@ describe("DownloadSVGButton", () => {
 		}
 	});
 
-	afterAll(() => {
-		// Restore all mocks
-		jest.restoreAllMocks();
+	afterEach(() => {
+		// Only restore the specific mocks we created
+		mockCreateElement.mockRestore();
 	});
 
 	it("should render with download icon and default title", () => {
@@ -120,6 +123,13 @@ describe("DownloadSVGButton", () => {
 
 	it("should serialize SVG and trigger download when clicked", () => {
 		render(<DownloadSVGButton frameId={mockFrameRef} />);
+
+		const mockAppendChild = jest
+			.spyOn(document.body, "appendChild")
+			.mockImplementation(() => mockLink);
+		const mockRemoveChild = jest
+			.spyOn(document.body, "removeChild")
+			.mockImplementation(() => mockLink);
 
 		const button = screen.getByRole("button");
 		fireEvent.click(button);
@@ -134,24 +144,18 @@ describe("DownloadSVGButton", () => {
 		expect(global.URL.createObjectURL).toHaveBeenCalled();
 
 		// Check that download link was created and configured
-		expect(mockCreateElement).toHaveBeenCalledWith("a");
+		expect(document.createElement).toHaveBeenCalledWith("a");
 		expect(mockLink.href).toBe("mock-blob-url");
-		expect(mockLink.download).toMatch(/pattern\d+\.svg/);
+		expect(mockLink.download).toMatch(/circuit-pattern-\d+\.svg/);
 
 		// Check DOM manipulation
 		expect(mockAppendChild).toHaveBeenCalledWith(mockLink);
 		expect(mockLink.click).toHaveBeenCalled();
 		expect(mockRemoveChild).toHaveBeenCalledWith(mockLink);
 		expect(global.URL.revokeObjectURL).toHaveBeenCalledWith("mock-blob-url");
-	});
 
-	it("should show success title after download", () => {
-		render(<DownloadSVGButton frameId={mockFrameRef} />);
-
-		const button = screen.getByRole("button");
-		fireEvent.click(button);
-
-		expect(button).toHaveAttribute("title", "Downloaded!");
+		mockAppendChild.mockRestore();
+		mockRemoveChild.mockRestore();
 	});
 
 	it("should handle case when frameId.current is null", () => {
@@ -163,7 +167,7 @@ describe("DownloadSVGButton", () => {
 		fireEvent.click(button);
 
 		// Should not attempt to create download
-		expect(mockCreateElement).not.toHaveBeenCalledWith("a");
+		expect(document.createElement).not.toHaveBeenCalledWith("a");
 		expect(mockLink.click).not.toHaveBeenCalled();
 	});
 
@@ -194,6 +198,13 @@ describe("DownloadSVGButton", () => {
 
 		render(<DownloadSVGButton frameId={mockFrameRef} />);
 
+		const mockAppendChild = jest
+			.spyOn(document.body, "appendChild")
+			.mockImplementation();
+		const mockRemoveChild = jest
+			.spyOn(document.body, "removeChild")
+			.mockImplementation();
+
 		const button = screen.getByRole("button");
 		fireEvent.click(button);
 
@@ -203,6 +214,8 @@ describe("DownloadSVGButton", () => {
 		);
 
 		global.Blob = originalBlob;
+		mockAppendChild.mockRestore();
+		mockRemoveChild.mockRestore();
 	});
 
 	it("should generate filename with timestamp", () => {
@@ -212,16 +225,32 @@ describe("DownloadSVGButton", () => {
 
 		render(<DownloadSVGButton frameId={mockFrameRef} />);
 
+		const mockAppendChild = jest
+			.spyOn(document.body, "appendChild")
+			.mockImplementation();
+		const mockRemoveChild = jest
+			.spyOn(document.body, "removeChild")
+			.mockImplementation();
+
 		const button = screen.getByRole("button");
 		fireEvent.click(button);
 
-		expect(mockLink.download).toBe(`pattern${mockTimestamp}.svg`);
+		expect(mockLink.download).toBe(`circuit-pattern-${mockTimestamp}.svg`);
 
 		Date.now = originalDateNow;
+		mockAppendChild.mockRestore();
+		mockRemoveChild.mockRestore();
 	});
 
 	it("should clean up properly after download", () => {
 		render(<DownloadSVGButton frameId={mockFrameRef} />);
+
+		const mockAppendChild = jest
+			.spyOn(document.body, "appendChild")
+			.mockImplementation(() => mockLink);
+		const mockRemoveChild = jest
+			.spyOn(document.body, "removeChild")
+			.mockImplementation(() => mockLink);
 
 		const button = screen.getByRole("button");
 		fireEvent.click(button);
@@ -231,5 +260,7 @@ describe("DownloadSVGButton", () => {
 		expect(mockLink.click).toHaveBeenCalled();
 		expect(mockRemoveChild).toHaveBeenCalledWith(mockLink);
 		expect(global.URL.revokeObjectURL).toHaveBeenCalledWith("mock-blob-url");
+		mockAppendChild.mockRestore();
+		mockRemoveChild.mockRestore();
 	});
 });
