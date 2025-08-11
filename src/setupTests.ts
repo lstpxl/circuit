@@ -9,7 +9,6 @@ import RO from "resize-observer-polyfill";
 
 // Expose for debug (narrowed)
 declare global {
-	// eslint-disable-next-line no-var
 	var __APP_ENV__:
 		| {
 				VITE_BASE_URL?: string;

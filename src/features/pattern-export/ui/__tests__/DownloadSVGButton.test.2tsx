@@ -24,14 +24,14 @@ global.XMLSerializer = jest.fn().mockImplementation(() => ({
 // Create a mock for document.createElement
 const realCreateElement = document.createElement.bind(document);
 
-let mockLink: HTMLAnchorElement;
+// let mockLink: HTMLAnchorElement;
 
 const mockCreateElement = jest.fn((tagName: string) => {
 	if (tagName === "a") {
-		mockLink = realCreateElement("a") as HTMLAnchorElement;
+		const link = realCreateElement("a") as HTMLAnchorElement;
 		// Mock the click method
-		mockLink.click = jest.fn();
-		return mockLink;
+		link.click = jest.fn();
+		return link;
 	}
 	return realCreateElement(tagName);
 });
@@ -40,12 +40,12 @@ const mockAppendChild = jest.fn();
 const mockRemoveChild = jest.fn();
 
 // Mock link element
-mockLink = {
+const mockLink = {
 	href: "",
 	download: "",
 	click: jest.fn(),
-	style: {},
-};
+	style: {} as CSSStyleDeclaration,
+} as unknown as HTMLAnchorElement;
 
 describe("DownloadSVGButton", () => {
 	let mockFrameRef: React.RefObject<HTMLDivElement | null>;
