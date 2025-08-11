@@ -110,7 +110,15 @@ describe("Generator URL Integration", () => {
 		(
 			jest.requireMock(
 				"@/features/pattern-generation/lib/usePatternGenerator",
-			) as any
+			) as {
+				usePatternGenerator: () => {
+					patternData: unknown;
+					code: string;
+					validationError: string | null;
+					generateFromParams: jest.Mock;
+					generateFromCode: jest.Mock;
+				};
+			}
 		).usePatternGenerator = () => ({
 			patternData: {
 				width: 4,

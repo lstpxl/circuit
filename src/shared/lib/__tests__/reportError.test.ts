@@ -1,4 +1,4 @@
-import { reportError } from "./reportError";
+import { reportError } from "../reportError";
 import {
 	InvalidCodeError,
 	GridCreationError,

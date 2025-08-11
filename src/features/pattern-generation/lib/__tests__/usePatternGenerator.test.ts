@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { usePatternGenerator } from "./usePatternGenerator";
+import { usePatternGenerator } from "../usePatternGenerator";
 import * as encode from "@/features/pattern-export/lib/encode";
 import {
 	InvalidCodeError,
