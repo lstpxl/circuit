@@ -72,3 +72,10 @@ if (!("ResizeObserver" in window)) {
 	window.ResizeObserver = RO;
 	global.ResizeObserver = RO;
 }
+
+// Mock PointerEvent methods for Radix UI components
+if (typeof window !== "undefined") {
+	window.HTMLElement.prototype.hasPointerCapture = jest.fn();
+	window.HTMLElement.prototype.releasePointerCapture = jest.fn();
+	window.HTMLElement.prototype.scrollIntoView = jest.fn();
+}

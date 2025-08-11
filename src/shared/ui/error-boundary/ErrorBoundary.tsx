@@ -49,10 +49,7 @@ export class ErrorBoundary extends React.Component<
 							<summary>Expected format</summary>
 							<code>{this.state.error.expectedFormat}</code>
 						</details>
-						<button
-							type="button"
-							onClick={() => this.setState({ hasError: false })}
-						>
+						<button type="button" onClick={this.handleRetry}>
 							Try Again
 						</button>
 					</div>
@@ -70,10 +67,7 @@ export class ErrorBoundary extends React.Component<
 								{this.state.error.dimensions.height}
 							</p>
 						)}
-						<button
-							type="button"
-							onClick={() => this.setState({ hasError: false })}
-						>
+						<button type="button" onClick={this.handleRetry}>
 							Try Again
 						</button>
 					</div>
